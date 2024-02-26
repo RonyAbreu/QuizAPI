@@ -21,7 +21,7 @@ public class ThemeService {
     }
 
     public ThemeResponse insertTheme(ThemeRequest themeRequest){
-        Theme theme = new Theme(themeRequest.theme());
+        Theme theme = new Theme(themeRequest.name());
         repository.save(theme);
         return theme.entityToResponse();
     }
@@ -56,6 +56,6 @@ public class ThemeService {
     }
 
     private void updateData(Theme theme, ThemeUpdate themeUpdate){
-        theme.setTheme(themeUpdate.theme());
+        theme.setName(themeUpdate.name());
     }
 }

@@ -2,6 +2,7 @@ package com.ronyelison.quiz.controller;
 
 import com.ronyelison.quiz.dto.alternative.AlternativeRequest;
 import com.ronyelison.quiz.dto.alternative.AlternativeResponse;
+import com.ronyelison.quiz.dto.alternative.AlternativeUpdate;
 import com.ronyelison.quiz.service.AlternativeService;
 import com.ronyelison.quiz.service.exception.AlternativeCorrectDuplicateException;
 import com.ronyelison.quiz.service.exception.FalseAlternativesOnlyException;
@@ -26,5 +27,10 @@ public class AlternativeController {
     public ResponseEntity<AlternativeResponse> insertAlternative(@RequestBody @Valid AlternativeRequest alternative, @PathVariable Long idQuestion)
             throws FalseAlternativesOnlyException, AlternativeCorrectDuplicateException, LimitOfAlternativesException {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insertAlternative(alternative, idQuestion));
+    }
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<AlternativeResponse> updateAlternative(@PathVariable Long id, @RequestBody AlternativeUpdate alternativeUpdate){
+        return ResponseEntity.ok(service.updateAlternative(id, alternativeUpdate));
     }
 }

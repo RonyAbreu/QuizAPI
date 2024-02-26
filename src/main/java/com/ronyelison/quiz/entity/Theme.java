@@ -11,7 +11,7 @@ public class Theme {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String theme;
+    private String name;
     @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Question> questions = new ArrayList<>();
 
@@ -19,12 +19,12 @@ public class Theme {
 
     }
 
-    public Theme(String theme) {
-        this.theme = theme;
+    public Theme(String name) {
+        this.name = name;
     }
 
     public ThemeResponse entityToResponse(){
-        return new ThemeResponse(id, theme);
+        return new ThemeResponse(id, name);
     }
 
     public void addQuestion(Question question){
@@ -35,11 +35,11 @@ public class Theme {
         return id;
     }
 
-    public String getTheme() {
-        return theme;
+    public String getName() {
+        return name;
     }
 
-    public void setTheme(String theme) {
-        this.theme = theme;
+    public void setName(String name) {
+        this.name = name;
     }
 }

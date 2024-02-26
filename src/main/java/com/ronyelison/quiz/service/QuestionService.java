@@ -56,6 +56,14 @@ public class QuestionService {
                 .entityToResponse();
     }
 
+    public List<QuestionResponse> findThemesByName(String name){
+        return questionRepository
+                .findByThemeNameIgnoreCase(name)
+                .stream()
+                .map(Question::entityToResponse)
+                .toList();
+    }
+
     public QuestionResponse updateQuestion(Long id, QuestionUpdate questionUpdate){
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"));
@@ -70,4 +78,6 @@ public class QuestionService {
         question.setTitle(questionUpdate.title());
         question.setImageUrl(questionUpdate.imageUrl());
     }
+
+
 }

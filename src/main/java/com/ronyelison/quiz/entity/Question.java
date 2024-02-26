@@ -17,8 +17,9 @@ public class Question {
     private Long id;
     private String title;
     private String imageUrl;
+    private final int MAXIMUM_NUMBER_OF_ALTERNATIVES = 4;
     @OneToMany(mappedBy = "question")
-    private List<Alternative> alternatives = new ArrayList<>();
+    private List<Alternative> alternatives = new ArrayList<>(MAXIMUM_NUMBER_OF_ALTERNATIVES);
 
     public Question(){
 
@@ -33,36 +34,12 @@ public class Question {
         return new QuestionResponse(id,title,imageUrl,alternatives);
     }
 
-    public void addAlternative(Alternative alternative) throws LimitOfAlternativesException, AlternativeCorrectDuplicateException, FalseAlternativesOnlyException {
-        if (this.alternatives.size() == 4){
-            throw new LimitOfAlternativesException("Limite máximo de alternativas");
-        }
-        if (isAlternativeCorrectDuplicate(alternative)) {
-            throw new AlternativeCorrectDuplicateException("Já existe uma alternativa verdadeira");
-        }
-        if (isFalseAlternativesOnly(alternative)){
-            throw new FalseAlternativesOnlyException("Não é possível cadastrar apenas alternativas falsas");
-        }
-
+    public void addAlternative(Alternative alternative) {
         this.alternatives.add(alternative);
     }
 
-    private boolean isAlternativeCorrectDuplicate(Alternative alternative){
-        for (Alternative a : this.alternatives){
-            if (a.getCorrect() && alternative.getCorrect()){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isFalseAlternativesOnly(Alternative alternative){
-        for (Alternative a : this.alternatives){
-            if (this.alternatives.size() == 3 && !a.getCorrect() && !alternative.getCorrect()){
-                return true;
-            }
-        }
-        return false;
+    public boolean isFullListOfAlternatives(){
+        return this.alternatives.size() == MAXIMUM_NUMBER_OF_ALTERNATIVES;
     }
 
     public Long getId() {

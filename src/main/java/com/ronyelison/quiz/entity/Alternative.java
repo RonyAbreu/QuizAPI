@@ -9,7 +9,7 @@ public class Alternative {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String description;
+    private String response;
     private Boolean correct;
     @ManyToOne
     private Question question;
@@ -18,25 +18,25 @@ public class Alternative {
     }
 
     public Alternative(AlternativeRequest alternativeRequest, Question question) {
-        this.description = alternativeRequest.description();
+        this.response = alternativeRequest.response();
         this.correct = alternativeRequest.correct();
         this.question = question;
     }
 
     public AlternativeResponse entityToResponse(){
-        return new AlternativeResponse(id,description,correct);
+        return new AlternativeResponse(id, response,correct);
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getResponse() {
+        return response;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setResponse(String response) {
+        this.response = response;
     }
 
     public Boolean getCorrect() {

@@ -6,6 +6,7 @@ import com.ronyelison.quiz.service.AlternativeService;
 import com.ronyelison.quiz.service.exception.AlternativeCorrectDuplicateException;
 import com.ronyelison.quiz.service.exception.FalseAlternativesOnlyException;
 import com.ronyelison.quiz.service.exception.LimitOfAlternativesException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,8 @@ public class AlternativeController {
     }
 
     @PostMapping(value = "/{idQuestion}")
-    public ResponseEntity<AlternativeResponse> insertAlternative(@RequestBody AlternativeRequest alternative, @PathVariable Long idQuestion) throws FalseAlternativesOnlyException, AlternativeCorrectDuplicateException, LimitOfAlternativesException {
+    public ResponseEntity<AlternativeResponse> insertAlternative(@RequestBody @Valid AlternativeRequest alternative, @PathVariable Long idQuestion)
+            throws FalseAlternativesOnlyException, AlternativeCorrectDuplicateException, LimitOfAlternativesException {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insertAlternative(alternative, idQuestion));
     }
 }

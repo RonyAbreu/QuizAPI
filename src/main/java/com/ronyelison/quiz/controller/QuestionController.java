@@ -3,6 +3,7 @@ package com.ronyelison.quiz.controller;
 import com.ronyelison.quiz.dto.question.QuestionRequest;
 import com.ronyelison.quiz.dto.question.QuestionResponse;
 import com.ronyelison.quiz.service.QuestionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<QuestionResponse> insertQuestion(@RequestBody QuestionRequest questionRequest){
+    public ResponseEntity<QuestionResponse> insertQuestion(@RequestBody @Valid QuestionRequest questionRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insertQuestion(questionRequest));
     }
 }

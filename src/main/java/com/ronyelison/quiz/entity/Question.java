@@ -2,6 +2,7 @@ package com.ronyelison.quiz.entity;
 
 import com.ronyelison.quiz.dto.question.QuestionRequest;
 import com.ronyelison.quiz.dto.question.QuestionResponse;
+import com.ronyelison.quiz.service.ThemeService;
 import com.ronyelison.quiz.service.exception.AlternativeCorrectDuplicateException;
 import com.ronyelison.quiz.service.exception.FalseAlternativesOnlyException;
 import com.ronyelison.quiz.service.exception.LimitOfAlternativesException;
@@ -17,21 +18,26 @@ public class Question {
     private Long id;
     private String title;
     private String imageUrl;
+    @ManyToOne
+    private Theme theme;
+    @Transient
     private final int MAXIMUM_NUMBER_OF_ALTERNATIVES = 4;
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Alternative> alternatives = new ArrayList<>(MAXIMUM_NUMBER_OF_ALTERNATIVES);
 
     public Question(){
 
     }
 
-    public Question(QuestionRequest questionRequest) {
+    public Question(QuestionRequest questionRequest, Theme theme) {
         this.title = questionRequest.title();
         this.imageUrl = questionRequest.imageUrl();
+        this.theme = theme;
     }
 
     public QuestionResponse entityToResponse(){
-        return new QuestionResponse(id,title,imageUrl,alternatives);
+        return new QuestionResponse(id,title,imageUrl,theme.entityToResponse(),
+                alternatives.stream().map(Alternative::entityToResponse).toList());
     }
 
     public void addAlternative(Alternative alternative) {

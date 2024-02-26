@@ -1,5 +1,6 @@
 package com.ronyelison.quiz.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ronyelison.quiz.dto.alternative.AlternativeRequest;
 import com.ronyelison.quiz.dto.alternative.AlternativeResponse;
 import jakarta.persistence.*;
@@ -11,7 +12,7 @@ public class Alternative {
     private Long id;
     private String response;
     private Boolean correct;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Question question;
 
     public Alternative(){

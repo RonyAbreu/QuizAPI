@@ -1,9 +1,6 @@
 package com.ronyelison.quiz.controller.exception;
 
-import com.ronyelison.quiz.service.exception.AlternativeCorrectDuplicateException;
-import com.ronyelison.quiz.service.exception.FalseAlternativesOnlyException;
-import com.ronyelison.quiz.service.exception.LimitOfAlternativesException;
-import com.ronyelison.quiz.service.exception.QuestionNotFoundException;
+import com.ronyelison.quiz.service.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +37,13 @@ public class ErroExceptionHandler {
 
     @ExceptionHandler(QuestionNotFoundException.class)
     public ResponseEntity<ErroResponse> questionNotFoundErro(QuestionNotFoundException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
+        return ResponseEntity.status(status).body(erroResponse);
+    }
+
+    @ExceptionHandler(ThemeNotFoundException.class)
+    public ResponseEntity<ErroResponse> themeNotFoundErro(ThemeNotFoundException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.NOT_FOUND;
         ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(erroResponse);

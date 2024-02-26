@@ -1,4 +1,11 @@
 package com.ronyelison.quiz.dto.question;
 
-public record QuestionUpdate(String title, String imageUrl) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record QuestionUpdate(
+        @NotBlank(message = "Campo de titulo não pode ser vazio")
+        @Size(min = 4 ,max = 500, message = "Número de caracteres inválido")
+        String title,
+        String imageUrl) {
 }

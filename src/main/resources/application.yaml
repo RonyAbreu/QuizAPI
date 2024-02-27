@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: test
+    active: ${APP_PROFILE}
 app:
   version: v1.0.0
 springdoc:

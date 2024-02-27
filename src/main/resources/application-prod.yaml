@@ -9,6 +9,6 @@ spring:
       enabled: always
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 cors:
   origins: ${CORS_ORIGINS}

@@ -12,11 +12,15 @@ public class Theme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "theme", fetch = FetchType.EAGER)
     private List<Question> questions = new ArrayList<>();
 
     public Theme(){
 
+    }
+
+    public boolean containsQuestionsInTheList(){
+        return !questions.isEmpty();
     }
 
     public Theme(String name) {
@@ -41,5 +45,9 @@ public class Theme {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
     }
 }

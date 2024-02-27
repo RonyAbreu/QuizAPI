@@ -18,7 +18,7 @@ public class Question {
     private Long id;
     private String title;
     private String imageUrl;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Theme theme;
     @Transient
     private final int MAXIMUM_NUMBER_OF_ALTERNATIVES = 4;
@@ -48,6 +48,10 @@ public class Question {
         return this.alternatives.size() == MAXIMUM_NUMBER_OF_ALTERNATIVES;
     }
 
+    public void removeQuestionOfThemeList(Long id){
+        theme.getQuestions().removeIf(question -> question.getId().equals(id));
+    }
+
     public Long getId() {
         return id;
     }
@@ -70,5 +74,9 @@ public class Question {
 
     public List<Alternative> getAlternatives() {
         return alternatives;
+    }
+
+    public Theme getTheme() {
+        return theme;
     }
 }

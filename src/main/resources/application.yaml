@@ -3,3 +3,6 @@ spring:
     active: test
 app:
   version: v1.0.0
+springdoc:
+  pathsToMatch:
+    - /api/v1/**

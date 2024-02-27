@@ -39,10 +39,16 @@ public class QuestionService {
     public void removeQuestion(Long id){
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"));
+
+        question.removeQuestionOfThemeList(id);
         questionRepository.delete(question);
     }
 
     public List<QuestionResponse> findAllQuestions(){
+        if (questionRepository.findAll().isEmpty()){
+            throw new QuestionNotFoundException("Nenhuma questão foi cadastrada");
+        }
+
         return questionRepository.findAll()
                 .stream()
                 .map(Question::entityToResponse)
@@ -56,7 +62,11 @@ public class QuestionService {
                 .entityToResponse();
     }
 
-    public List<QuestionResponse> findThemesByName(String name){
+    public List<QuestionResponse> findQuestionByThemesName(String name){
+        if (questionRepository.findByThemeNameIgnoreCase(name).isEmpty()){
+            throw new QuestionNotFoundException("Não existe nenhum Questão ligada a esse Tema");
+        }
+
         return questionRepository
                 .findByThemeNameIgnoreCase(name)
                 .stream()

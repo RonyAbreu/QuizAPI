@@ -2,6 +2,7 @@ package com.ronyelison.quiz.controller.exception;
 
 import com.ronyelison.quiz.service.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -57,5 +58,12 @@ public class ErroExceptionHandler {
             validationErro.addErro(error.getField(), error.getDefaultMessage());
         }
         return ResponseEntity.status(status).body(validationErro);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErroResponse> dataIntegrityErro(DataIntegrityViolationException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
+        return ResponseEntity.status(status).body(erroResponse);
     }
 }

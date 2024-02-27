@@ -7,14 +7,22 @@ assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+# Requisito (Nova funcionalidade)
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+### Classificação
+* [ ]  Requisito Funcional (RF).
+* [ ]  Requisito Não Funcional (RNF).
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+### Prioridade
+* [ ]  low
+* [ ]  medium
+* [ ]  high
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+### Descrição
+> Descrição detalhada da funcionalidade.
+
+#### Regras
+> Descreva em forma de lista não ordenada as regras de negócio que devem ser levadas em conta ao implementar a funcionalidade.
+
+#### Observações
+> Descreva em forma de lista não ordenada atributos, métodos, ou qualquer outra observação que deva ser levada em consideração ao implementar a funcionalidade.

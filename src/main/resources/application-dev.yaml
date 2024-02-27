@@ -1,1 +1,14 @@
-
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${DEV_USER}
+    url: jdbc:postgresql://localhost:${DEV_PORT}/${DEV_DB}
+    password: ${DEV_PASSWORD}
+  output:
+    ansi:
+      enabled: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+cors:
+  origins: http://127.0.0.1:5500

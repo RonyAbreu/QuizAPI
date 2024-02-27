@@ -7,32 +7,26 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+### Pré Requisitos
+> O que precisamos para reproduzir o problema?
+> Qual os passos detalhados que devem ser seguidos para reproduzir o problema?
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+### Resultado esperado
+> Qual era o resultado esperado ao completar os passos?
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+### Evidências 
+> O que foi que aconteceu ao completar os passos? Por favor insira imagens e logs relevantes.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+### Possível Solução 
+> Você tem alguma solução em mente? mesmo que seja em alto nível, sua contribuição seria muito bem vinda.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+### Ambiente no qual o bug foi identificado: 
+* [ ]  Produção
+* [ ]  Desenvolvimento
+* [ ]  Teste
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+### Versão: 
+> Versão dos módulos utilizados.
 
-**Additional context**
-Add any other context about the problem here.
+### Outros artefatos:
+> Itens que utilizou para realizar os testes.

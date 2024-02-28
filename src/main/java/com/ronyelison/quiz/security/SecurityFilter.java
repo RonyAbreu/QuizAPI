@@ -1,6 +1,7 @@
 package com.ronyelison.quiz.security;
 
 import com.ronyelison.quiz.repository.UserRepository;
+import com.ronyelison.quiz.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,12 +18,12 @@ import java.io.IOException;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
     private TokenProvider tokenProvider;
-    private UserRepository userRepository;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    public SecurityFilter(TokenProvider tokenProvider, UserRepository userRepository) {
+    public SecurityFilter(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService) {
         this.tokenProvider = tokenProvider;
-        this.userRepository = userRepository;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (token != null){
             String email = tokenProvider.getSubjectByToken(token);
-            UserDetails userDetails = userRepository.findByEmail(email);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
             UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(user);
         }

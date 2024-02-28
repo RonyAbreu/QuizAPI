@@ -6,6 +6,7 @@ spring:
       enabled: always
 app:
   version: v1.0.0
+  secret: ${APP_SECRET}
 springdoc:
   pathsToMatch:
     - /api/v1/**

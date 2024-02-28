@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @SpringBootApplication
 @Controller
-@EnableAutoConfiguration(exclude = SecurityAutoConfiguration.class)
 public class QuizApplication {
 	@Value("${app.version}")
 	private String version;

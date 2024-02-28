@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: ${APP_PROFILE}
+  output:
+    ansi:
+      enabled: always
 app:
   version: v1.0.0
 springdoc:

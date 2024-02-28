@@ -4,9 +4,6 @@ spring:
     username: ${DEV_USER}
     url: jdbc:postgresql://${DEV_HOST}:5432/${DEV_DB}
     password: ${DEV_PASSWORD}
-  output:
-    ansi:
-      enabled: always
   jpa:
     hibernate:
       ddl-auto: update

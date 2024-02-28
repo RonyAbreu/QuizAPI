@@ -11,8 +11,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  output:
-    ansi:
-      enabled: always
 cors:
   origins: http://127.0.0.1:5500

@@ -1,6 +1,6 @@
-FROM maven:3.9.6-amazoncorretto-21
+FROM amazoncorretto:21.0.2-alpine3.19
 WORKDIR /app
-COPY . .
-RUN mvn package -DskipTests
+ARG JAR_FILE=target/QuizAPI.jar
+COPY ${JAR_FILE} app.jar
 EXPOSE 8080
-CMD ["java", "-jar", "/app/target/QuizAPI.jar"]
+CMD ["java", "-jar", "app.jar"]

@@ -21,7 +21,7 @@ services:
       - db
     restart: always
     build:
-      context: .
+      dockerfile: Dockerfile
     env_file:
       - dev.env
     ports:

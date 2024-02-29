@@ -83,9 +83,9 @@ public class QuestionController {
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
     } )
-    @GetMapping(value = "/theme", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<QuestionResponse>> findQuestionByThemesName(@RequestParam(value = "name") String name){
-        return ResponseEntity.ok(service.findQuestionByThemesName(name));
+    @GetMapping(value = "/theme/{idTheme}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<QuestionResponse>> findQuestionByThemeId(@PathVariable Long idTheme){
+        return ResponseEntity.ok(service.findQuestionByThemeId(idTheme));
     }
 
     @Operation(tags = "Question", summary = "Update Question", responses ={
@@ -96,7 +96,7 @@ public class QuestionController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @PutMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable Long id, @RequestBody QuestionUpdate questionUpdate,
+    public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable Long id, @RequestBody @Valid QuestionUpdate questionUpdate,
                                                            @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
         return ResponseEntity.ok(service.updateQuestion(id, questionUpdate, token));
     }

@@ -80,4 +80,18 @@ public class ErroExceptionHandler {
         ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(erroResponse);
     }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErroResponse> userAlreadyExistsErro(UserAlreadyExistsException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
+        return ResponseEntity.status(status).body(erroResponse);
+    }
+
+    @ExceptionHandler(ThemeAlreadyExistsException.class)
+    public ResponseEntity<ErroResponse> themeAlreadyExistsErro(ThemeAlreadyExistsException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
+        return ResponseEntity.status(status).body(erroResponse);
+    }
 }

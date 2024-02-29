@@ -51,7 +51,7 @@ public class AlternativeController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AlternativeResponse> updateAlternative(@PathVariable Long id, @RequestBody AlternativeUpdate alternativeUpdate){
+    public ResponseEntity<AlternativeResponse> updateAlternative(@PathVariable Long id, @RequestBody @Valid AlternativeUpdate alternativeUpdate){
         return ResponseEntity.ok(service.updateAlternative(id, alternativeUpdate));
     }
 }

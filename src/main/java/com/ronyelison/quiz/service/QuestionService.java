@@ -79,13 +79,13 @@ public class QuestionService {
                 .entityToResponse();
     }
 
-    public List<QuestionResponse> findQuestionByThemesName(String name){
-        if (questionRepository.findByThemeNameIgnoreCase(name).isEmpty()){
+    public List<QuestionResponse> findQuestionByThemeId(Long id){
+        if (questionRepository.findByTheme(id).isEmpty()){
             throw new QuestionNotFoundException("Não existe nenhum Questão ligada a esse Tema");
         }
 
         return questionRepository
-                .findByThemeNameIgnoreCase(name)
+                .findByTheme(id)
                 .stream()
                 .map(Question::entityToResponse)
                 .toList();

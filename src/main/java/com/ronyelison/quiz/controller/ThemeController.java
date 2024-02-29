@@ -5,6 +5,7 @@ import com.ronyelison.quiz.dto.theme.ThemeRequest;
 import com.ronyelison.quiz.dto.theme.ThemeResponse;
 import com.ronyelison.quiz.dto.theme.ThemeUpdate;
 import com.ronyelison.quiz.service.ThemeService;
+import com.ronyelison.quiz.service.exception.ThemeAlreadyExistsException;
 import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -39,7 +40,7 @@ public class ThemeController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ThemeResponse> insertTheme(@RequestBody @Valid ThemeRequest themeRequest, @RequestHeader("Authorization") String token){
+    public ResponseEntity<ThemeResponse> insertTheme(@RequestBody @Valid ThemeRequest themeRequest, @RequestHeader("Authorization") String token) throws ThemeAlreadyExistsException {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insertTheme(themeRequest, token));
     }
 

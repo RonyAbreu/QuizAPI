@@ -6,6 +6,7 @@ import com.ronyelison.quiz.dto.theme.ThemeUpdate;
 import com.ronyelison.quiz.entity.Theme;
 import com.ronyelison.quiz.entity.User;
 import com.ronyelison.quiz.repository.ThemeRepository;
+import com.ronyelison.quiz.service.exception.ThemeAlreadyExistsException;
 import com.ronyelison.quiz.service.exception.ThemeNotFoundException;
 import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,20 @@ public class ThemeService {
         this.userService = userService;
     }
 
-    public ThemeResponse insertTheme(ThemeRequest themeRequest, String token){
+    public ThemeResponse insertTheme(ThemeRequest themeRequest, String token) throws ThemeAlreadyExistsException {
+        Theme theme = repository.findByNameIgnoreCase(themeRequest.name());
+
+        if (theme != null){
+            throw new ThemeAlreadyExistsException("Esse tema já foi cadastrado, tente novamente com outro Nome");
+        }
+
         User user = userService.findUserByToken(token);
 
-        Theme theme = new Theme(themeRequest.name(), user);
-        user.addTheme(theme);
+        Theme saveTheme = new Theme(themeRequest.name(), user);
+        user.addTheme(saveTheme);
 
-        repository.save(theme);
-        return theme.entityToResponse();
+        repository.save(saveTheme);
+        return saveTheme.entityToResponse();
     }
 
     public void removeTheme(Long id, String token) throws UserNotHavePermissionException {

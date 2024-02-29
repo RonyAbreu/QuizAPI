@@ -66,4 +66,18 @@ public class ErroExceptionHandler {
         ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(erroResponse);
     }
+
+    @ExceptionHandler(InvalidUserException.class)
+    public ResponseEntity<ErroResponse> invalidUserErro(InvalidUserException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),"Usuário não existe, inválido",request.getRequestURI());
+        return ResponseEntity.status(status).body(erroResponse);
+    }
+
+    @ExceptionHandler(UserNotHavePermissionException.class)
+    public ResponseEntity<ErroResponse> userNotHavePermissionrErro(UserNotHavePermissionException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
+        return ResponseEntity.status(status).body(erroResponse);
+    }
 }

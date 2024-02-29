@@ -13,6 +13,7 @@ import com.ronyelison.quiz.security.TokenProvider;
 import com.ronyelison.quiz.service.exception.InvalidUserException;
 import com.ronyelison.quiz.service.exception.QuestionNotFoundException;
 import com.ronyelison.quiz.service.exception.ThemeNotFoundException;
+import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -23,20 +24,18 @@ import java.util.List;
 public class QuestionService {
     private QuestionRepository questionRepository;
     private ThemeRepository themeRepository;
-    private UserRepository userRepository;
-    private TokenProvider tokenProvider;
+    private UserService userService;
 
     @Autowired
     public QuestionService(QuestionRepository questionRepository, ThemeRepository themeRepository,
-                           UserRepository userRepository, TokenProvider tokenProvider) {
+                           UserService userService) {
         this.questionRepository = questionRepository;
         this.themeRepository = themeRepository;
-        this.userRepository = userRepository;
-        this.tokenProvider = tokenProvider;
+        this.userService = userService;
     }
 
-    public QuestionResponse insertQuestion(QuestionRequest questionRequest, Long idTheme, String token) throws InvalidUserException {
-        User creator = findUserByToken(token);
+    public QuestionResponse insertQuestion(QuestionRequest questionRequest, Long idTheme, String token){
+        User creator = userService.findUserByToken(token);
 
         Theme theme = themeRepository.findById(idTheme)
                 .orElseThrow(()-> new ThemeNotFoundException("Tema não encontrado"));
@@ -49,9 +48,14 @@ public class QuestionService {
         return question.entityToResponse();
     }
 
-    public void removeQuestion(Long id){
+    public void removeQuestion(Long id, String token) throws UserNotHavePermissionException {
+        User user = userService.findUserByToken(token);
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"));
+
+        if (!user.equals(question.getCreator())){
+            throw new UserNotHavePermissionException("Usuário não tem permissão para remover essa questão");
+        }
 
         question.removeQuestionOfThemeList(id);
         questionRepository.delete(question);
@@ -87,9 +91,15 @@ public class QuestionService {
                 .toList();
     }
 
-    public QuestionResponse updateQuestion(Long id, QuestionUpdate questionUpdate){
+    public QuestionResponse updateQuestion(Long id, QuestionUpdate questionUpdate, String token) throws UserNotHavePermissionException {
+        User user = userService.findUserByToken(token);
+
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"));
+
+        if (!user.equals(question.getCreator())){
+            throw new UserNotHavePermissionException("Usuário não tem permissão para atualizar essa questão");
+        }
 
         updateData(question, questionUpdate);
         questionRepository.save(question);
@@ -100,21 +110,6 @@ public class QuestionService {
     private void updateData(Question question, QuestionUpdate questionUpdate){
         question.setTitle(questionUpdate.title());
         question.setImageUrl(questionUpdate.imageUrl());
-    }
-
-    private User findUserByToken(String token) throws InvalidUserException {
-        if (token.startsWith("Bearer ")){
-            token = token.substring("Bearer ".length());
-        }
-        String email = tokenProvider.getSubjectByToken(token);
-
-        User user = (User) userRepository.findByEmail(email);
-
-        if (user == null){
-            throw new InvalidUserException("Usuário inválido, pode ter sido removido do BD e utilizado o token");
-        }
-
-        return user;
     }
 
 }

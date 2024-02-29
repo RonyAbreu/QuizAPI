@@ -21,8 +21,9 @@ public class Theme {
 
     }
 
-    public Theme(String name) {
+    public Theme(String name, User creator) {
         this.name = name;
+        this.creator = creator;
     }
 
     public ThemeResponse entityToResponse(){
@@ -50,5 +51,9 @@ public class Theme {
 
     public List<Question> getQuestions() {
         return questions;
+    }
+
+    public User getCreator() {
+        return creator;
     }
 }

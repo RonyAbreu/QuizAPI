@@ -7,6 +7,7 @@ import com.ronyelison.quiz.dto.user.UserResponse;
 import com.ronyelison.quiz.entity.User;
 import com.ronyelison.quiz.repository.UserRepository;
 import com.ronyelison.quiz.security.TokenProvider;
+import com.ronyelison.quiz.service.exception.InvalidUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,5 +45,20 @@ public class UserService {
         Authentication auth = authenticationManager.authenticate(user);
         String token = tokenProvider.generateToken((User) auth.getPrincipal());
         return new TokenResponse(token);
+    }
+
+    public User findUserByToken(String token) {
+        if (token.startsWith("Bearer ")){
+            token = token.substring("Bearer ".length());
+        }
+        String email = tokenProvider.getSubjectByToken(token);
+
+        User user = (User) userRepository.findByEmail(email);
+
+        if (user == null){
+            throw new InvalidUserException("Usuário inválido, pode ter sido removido do BD e utilizado o token");
+        }
+
+        return user;
     }
 }

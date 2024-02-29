@@ -5,6 +5,7 @@ import com.ronyelison.quiz.dto.question.QuestionResponse;
 import com.ronyelison.quiz.dto.question.QuestionUpdate;
 import com.ronyelison.quiz.service.QuestionService;
 import com.ronyelison.quiz.service.exception.InvalidUserException;
+import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,7 +41,7 @@ public class QuestionController {
     } )
     @PostMapping(value = "/{idTheme}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<QuestionResponse> insertQuestion(@RequestBody @Valid QuestionRequest questionRequest, @PathVariable Long idTheme,
-                                                           @RequestHeader(value = "Authorization") String token) throws InvalidUserException {
+                                                           @RequestHeader(value = "Authorization") String token) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insertQuestion(questionRequest, idTheme, token));
     }
 
@@ -51,8 +52,8 @@ public class QuestionController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> removeQuestion(@PathVariable Long id){
-        service.removeQuestion(id);
+    public ResponseEntity<Void> removeQuestion(@PathVariable Long id, @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
+        service.removeQuestion(id, token);
         return ResponseEntity.noContent().build();
     }
 
@@ -95,7 +96,8 @@ public class QuestionController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @PutMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable Long id, @RequestBody QuestionUpdate questionUpdate){
-        return ResponseEntity.ok(service.updateQuestion(id, questionUpdate));
+    public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable Long id, @RequestBody QuestionUpdate questionUpdate,
+                                                           @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
+        return ResponseEntity.ok(service.updateQuestion(id, questionUpdate, token));
     }
 }

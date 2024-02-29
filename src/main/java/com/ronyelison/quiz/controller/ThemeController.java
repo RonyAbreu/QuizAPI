@@ -5,6 +5,7 @@ import com.ronyelison.quiz.dto.theme.ThemeRequest;
 import com.ronyelison.quiz.dto.theme.ThemeResponse;
 import com.ronyelison.quiz.dto.theme.ThemeUpdate;
 import com.ronyelison.quiz.service.ThemeService;
+import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,8 +39,8 @@ public class ThemeController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ThemeResponse> insertTheme(@RequestBody @Valid ThemeRequest themeRequest){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.insertTheme(themeRequest));
+    public ResponseEntity<ThemeResponse> insertTheme(@RequestBody @Valid ThemeRequest themeRequest, @RequestHeader("Authorization") String token){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.insertTheme(themeRequest, token));
     }
 
     @Operation(tags = "Theme", summary = "Remove Theme", responses ={
@@ -49,8 +50,8 @@ public class ThemeController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> removeTheme(@PathVariable Long id){
-        service.removeTheme(id);
+    public ResponseEntity<Void> removeTheme(@PathVariable Long id, @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
+        service.removeTheme(id, token);
         return ResponseEntity.noContent().build();
     }
 
@@ -83,8 +84,9 @@ public class ThemeController {
     } )
     @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ThemeResponse> updateTheme(@PathVariable Long id,
-                                                     @RequestBody @Valid ThemeUpdate themeUpdate){
-        return ResponseEntity.ok(service.updateTheme(id,themeUpdate));
+                                                     @RequestBody @Valid ThemeUpdate themeUpdate,
+                                                     @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
+        return ResponseEntity.ok(service.updateTheme(id,themeUpdate, token));
     }
 
 }

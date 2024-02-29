@@ -12,15 +12,13 @@ public class Theme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private User creator;
     @OneToMany(mappedBy = "theme", fetch = FetchType.EAGER)
     private List<Question> questions = new ArrayList<>();
 
     public Theme(){
 
-    }
-
-    public boolean containsQuestionsInTheList(){
-        return !questions.isEmpty();
     }
 
     public Theme(String name) {
@@ -33,6 +31,9 @@ public class Theme {
 
     public void addQuestion(Question question){
         this.questions.add(question);
+    }
+    public boolean containsQuestionsInTheList(){
+        return !questions.isEmpty();
     }
 
     public Long getId() {

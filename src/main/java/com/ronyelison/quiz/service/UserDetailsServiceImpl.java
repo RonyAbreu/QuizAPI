@@ -18,6 +18,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username);
+        UserDetails userDetails = userRepository.findByEmail(username);
+        if (userDetails == null){
+            throw new UsernameNotFoundException("Usuário inválido, pode ter sido removido do BD e utilizado o token");
+        }
+        return userDetails;
     }
 }

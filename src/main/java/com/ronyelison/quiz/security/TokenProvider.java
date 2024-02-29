@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.ronyelison.quiz.entity.User;
+import com.ronyelison.quiz.service.exception.TokenException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class TokenProvider {
                     .sign(algorithm)
                     .strip();
         } catch (JWTCreationException e){
-            throw new RuntimeException();
+            throw new TokenException(e.getMessage(), e.getCause());
         }
     }
 
@@ -50,7 +51,7 @@ public class TokenProvider {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException e){
-            throw new RuntimeException();
+            throw new TokenException(e.getMessage(), e.getCause());
         }
     }
 }

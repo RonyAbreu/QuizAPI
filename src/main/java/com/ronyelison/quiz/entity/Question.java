@@ -20,6 +20,8 @@ public class Question {
     private String imageUrl;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Theme theme;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private User creator;
     @Transient
     private final int MAXIMUM_NUMBER_OF_ALTERNATIVES = 4;
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
@@ -29,10 +31,11 @@ public class Question {
 
     }
 
-    public Question(QuestionRequest questionRequest, Theme theme) {
+    public Question(QuestionRequest questionRequest, Theme theme, User creator) {
         this.title = questionRequest.title();
         this.imageUrl = questionRequest.imageUrl();
         this.theme = theme;
+        this.creator = creator;
     }
 
     public QuestionResponse entityToResponse(){
@@ -78,5 +81,9 @@ public class Question {
 
     public Theme getTheme() {
         return theme;
+    }
+
+    public User getCreator() {
+        return creator;
     }
 }

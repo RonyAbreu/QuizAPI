@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,10 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany(mappedBy = "creator")
+    private List<Theme> themes = new ArrayList<>();
+    @OneToMany(mappedBy = "creator")
+    private List<Question> questions = new ArrayList<>();
 
     public User(){
 
@@ -31,10 +36,19 @@ public class User implements UserDetails {
         this.name = userRequest.name();
         this.email = userRequest.email();
         this.password = userRequest.password();
+        this.role = Role.USER;
     }
 
     public UserResponse entityToResponse(){
         return new UserResponse(uuid,name,email);
+    }
+
+    public void addTheme(Theme theme){
+        this.themes.add(theme);
+    }
+
+    public void addQuestion(Question question){
+        this.questions.add(question);
     }
 
     public String getName() {

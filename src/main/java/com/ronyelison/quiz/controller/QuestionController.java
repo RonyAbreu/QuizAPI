@@ -4,6 +4,7 @@ import com.ronyelison.quiz.dto.question.QuestionRequest;
 import com.ronyelison.quiz.dto.question.QuestionResponse;
 import com.ronyelison.quiz.dto.question.QuestionUpdate;
 import com.ronyelison.quiz.service.QuestionService;
+import com.ronyelison.quiz.service.exception.InvalidUserException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,8 +39,9 @@ public class QuestionController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @PostMapping(value = "/{idTheme}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionResponse> insertQuestion(@RequestBody @Valid QuestionRequest questionRequest, @PathVariable Long idTheme){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.insertQuestion(questionRequest, idTheme));
+    public ResponseEntity<QuestionResponse> insertQuestion(@RequestBody @Valid QuestionRequest questionRequest, @PathVariable Long idTheme,
+                                                           @RequestHeader(value = "Authorization") String token) throws InvalidUserException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.insertQuestion(questionRequest, idTheme, token));
     }
 
     @Operation(tags = "Question", summary = "Remove Question", responses ={

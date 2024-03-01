@@ -8,14 +8,10 @@ import com.ronyelison.quiz.entity.Theme;
 import com.ronyelison.quiz.entity.User;
 import com.ronyelison.quiz.repository.QuestionRepository;
 import com.ronyelison.quiz.repository.ThemeRepository;
-import com.ronyelison.quiz.repository.UserRepository;
-import com.ronyelison.quiz.security.TokenProvider;
-import com.ronyelison.quiz.service.exception.InvalidUserException;
 import com.ronyelison.quiz.service.exception.QuestionNotFoundException;
 import com.ronyelison.quiz.service.exception.ThemeNotFoundException;
 import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,12 +76,12 @@ public class QuestionService {
     }
 
     public List<QuestionResponse> findQuestionByThemeId(Long id){
-        if (questionRepository.findByTheme(id).isEmpty()){
+        if (questionRepository.findByThemeId(id).isEmpty()){
             throw new QuestionNotFoundException("Não existe nenhum Questão ligada a esse Tema");
         }
 
         return questionRepository
-                .findByTheme(id)
+                .findByThemeId(id)
                 .stream()
                 .map(Question::entityToResponse)
                 .toList();

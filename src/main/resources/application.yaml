@@ -5,7 +5,7 @@ spring:
     ansi:
       enabled: always
 app:
-  version: v1.0.0
+  version: ${APP_VERSION}
   secret: ${APP_SECRET}
 springdoc:
   pathsToMatch:

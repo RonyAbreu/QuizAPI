@@ -115,7 +115,7 @@ Com a API rodando, acesse a seguinte URL `http://localhost:8080/swagger-ui/index
 
 ## :page_facing_up: Licença
 
-Este projeto utiliza a licença Apache License 2.0, [LICENSE.md](https://github.com/a4s-ufpb/LICENSE.md) para mais detalhes.
+Este projeto utiliza a licença Apache License 2.0, [LICENSE.md](https://github.com/a4s-ufpb/QuizAPI/blob/main/LICENSE.md) para mais detalhes.
 
 ## 👩‍💻👨‍💻 Contribuidores
 
@@ -144,7 +144,7 @@ Este projeto utiliza a licença Apache License 2.0, [LICENSE.md](https://github.
 </table>
 
 ### :handshake: Quer ser um contribuidor?
-Leia o arquivo [CONTRIBUTING.md](https://github.com/a4s-ufpb/EducAPI/blob/master/CONTRIBUTING.md) para saber mais detalhes, e efetue o seu Pull Request.
+Leia o arquivo [CONTRIBUTING.md](https://github.com/a4s-ufpb/QuizAPI/blob/main/CONTRIBUTING.md) para saber mais detalhes, e efetue o seu Pull Request.
 
 ## :mailbox: Contatos
 * Para saber mais sobre o projeto Apps4Society acesse o nosso site [![Site Apps4Society](https://img.shields.io/twitter/url?color=blue&label=Site%20Apps4Society&logo=Apps4Society&style=plastic&url=https%3A%2F%2Fapps4society.dcx.ufpb.br)](https://apps4society.dcx.ufpb.br)

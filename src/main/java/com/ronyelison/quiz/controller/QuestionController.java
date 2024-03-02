@@ -14,6 +14,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,8 +66,10 @@ public class QuestionController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content())
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<QuestionResponse>> findAllQuestions(){
-        return ResponseEntity.ok(service.findAllQuestions());
+    public ResponseEntity<Page<QuestionResponse>> findAllQuestions(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                   @RequestParam(value = "size", defaultValue = "20") Integer size){
+        Pageable pageable = PageRequest.of(page,size);
+        return ResponseEntity.ok(service.findAllQuestions(pageable));
     }
 
     @Operation(tags = "Question", summary = "Find Question", responses ={
@@ -78,14 +83,17 @@ public class QuestionController {
         return ResponseEntity.ok(service.findQuestionById(id));
     }
 
-    @Operation(tags = "Question", summary = "Find Questions by Theme Name", responses ={
+    @Operation(tags = "Question", summary = "Find Questions by Theme", responses ={
             @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = QuestionResponse.class)))),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
     } )
     @GetMapping(value = "/theme/{idTheme}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<QuestionResponse>> findQuestionByThemeId(@PathVariable Long idTheme){
-        return ResponseEntity.ok(service.findQuestionByThemeId(idTheme));
+    public ResponseEntity<Page<QuestionResponse>> findQuestionByThemeId(@PathVariable Long idTheme,
+                                                                        @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                        @RequestParam(value = "size", defaultValue = "20") Integer size){
+        Pageable pageable = PageRequest.of(page,size);
+        return ResponseEntity.ok(service.findQuestionByThemeId(idTheme,pageable));
     }
 
     @Operation(tags = "Question", summary = "Update Question", responses ={
@@ -99,5 +107,15 @@ public class QuestionController {
     public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable Long id, @RequestBody @Valid QuestionUpdate questionUpdate,
                                                            @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
         return ResponseEntity.ok(service.updateQuestion(id, questionUpdate, token));
+    }
+
+    @Operation(tags = "Question", summary = "Find 10 Questions by Theme", responses ={
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = QuestionResponse.class)))),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
+    } )
+    @GetMapping(value = "/quiz/{idTheme}")
+    public ResponseEntity<List<QuestionResponse>> find10QuestionsByThemeId(@PathVariable Long idTheme){
+        return ResponseEntity.ok(service.find10QuestionsByThemeId(idTheme));
     }
 }

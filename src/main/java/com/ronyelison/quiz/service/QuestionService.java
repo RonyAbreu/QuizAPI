@@ -12,6 +12,8 @@ import com.ronyelison.quiz.service.exception.QuestionNotFoundException;
 import com.ronyelison.quiz.service.exception.ThemeNotFoundException;
 import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,15 +59,24 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
-    public List<QuestionResponse> findAllQuestions(){
-        if (questionRepository.findAll().isEmpty()){
+    public Page<QuestionResponse> findAllQuestions(Pageable pageable){
+        Page<Question> questionPage = questionRepository.findAll(pageable);
+
+        if (questionPage.isEmpty()){
             throw new QuestionNotFoundException("Nenhuma questão foi cadastrada");
         }
 
-        return questionRepository.findAll()
-                .stream()
-                .map(Question::entityToResponse)
-                .toList();
+        return questionPage.map(Question::entityToResponse);
+    }
+
+    public List<QuestionResponse> find10QuestionsByThemeId(Long id){
+        List<Question> questions = questionRepository.find10QuestionsByThemeId(id);
+
+        if (questions.isEmpty()){
+            throw new QuestionNotFoundException("Não existe nenhum Questão ligada a esse Tema");
+        }
+
+        return questions.stream().map(Question::entityToResponse).toList();
     }
 
     public QuestionResponse findQuestionById(Long id){
@@ -75,16 +86,14 @@ public class QuestionService {
                 .entityToResponse();
     }
 
-    public List<QuestionResponse> findQuestionByThemeId(Long id){
-        if (questionRepository.findByThemeId(id).isEmpty()){
+    public Page<QuestionResponse> findQuestionByThemeId(Long id, Pageable pageable){
+        Page<Question> questionPage = questionRepository.findByThemeId(id, pageable);
+
+        if (questionPage.isEmpty()){
             throw new QuestionNotFoundException("Não existe nenhum Questão ligada a esse Tema");
         }
 
-        return questionRepository
-                .findByThemeId(id)
-                .stream()
-                .map(Question::entityToResponse)
-                .toList();
+        return questionPage.map(Question::entityToResponse);
     }
 
     public QuestionResponse updateQuestion(Long id, QuestionUpdate questionUpdate, String token) throws UserNotHavePermissionException {

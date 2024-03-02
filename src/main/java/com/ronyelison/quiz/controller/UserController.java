@@ -1,12 +1,20 @@
 package com.ronyelison.quiz.controller;
 
+import com.ronyelison.quiz.dto.alternative.AlternativeResponse;
 import com.ronyelison.quiz.dto.user.*;
 import com.ronyelison.quiz.service.UserService;
 import com.ronyelison.quiz.service.exception.UserAlreadyExistsException;
 import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user")
+@Tag(name = "User", description = "Users of Quiz")
 public class UserController {
     private UserService userService;
 
@@ -22,23 +31,48 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/register")
+    @Operation(tags = "User", summary = "Register User", responses ={
+            @ApiResponse(description = "Success", responseCode = "201", content = @Content(schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
+    } )
+    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRequest userRequest) throws UserAlreadyExistsException {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.registerUser(userRequest));
     }
 
-    @PostMapping(value = "/login")
+    @Operation(tags = "User", summary = "Login User", responses ={
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(schema = @Schema(implementation = TokenResponse.class))),
+            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
+    } )
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TokenResponse> loginUser(@RequestBody @Valid UserLogin userLogin){
         return ResponseEntity.ok(userService.loginUser(userLogin));
     }
 
+    @Operation(tags = "User", summary = "Remove User", responses ={
+            @ApiResponse(description = "No Content", responseCode = "204", content = @Content()),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
+    } )
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> removeUser(@PathVariable UUID id, @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
         userService.removeUser(id, token);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping(value = "/{id}")
+    @Operation(tags = "User", summary = "Update User", responses ={
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content()),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
+    } )
+    @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdate userUpdate,
                                                    @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
         return ResponseEntity.ok(userService.updateUser(id, userUpdate, token));

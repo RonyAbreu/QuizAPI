@@ -8,6 +8,7 @@ import com.ronyelison.quiz.service.exception.AlternativeCorrectDuplicateExceptio
 import com.ronyelison.quiz.service.exception.FalseAlternativesOnlyException;
 import com.ronyelison.quiz.service.exception.LimitOfAlternativesException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/alternative")
@@ -41,6 +45,24 @@ public class AlternativeController {
     public ResponseEntity<AlternativeResponse> insertAlternative(@RequestBody @Valid AlternativeRequest alternative, @PathVariable Long idQuestion)
             throws FalseAlternativesOnlyException, AlternativeCorrectDuplicateException, LimitOfAlternativesException {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insertAlternative(alternative, idQuestion));
+    }
+
+    @Operation(tags = "Alternative", summary = "Insert All Alternative", responses ={
+            @ApiResponse(description = "Success", responseCode = "201", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AlternativeResponse.class)))),
+            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Question Not Found", responseCode = "404", content = @Content()),
+            @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
+    } )
+    @PostMapping(value = "/all/{idQuestion}")
+    public ResponseEntity<List<AlternativeResponse>> insertAllAlternatives(@RequestBody @Valid AlternativeRequest [] alternativeRequests,
+                                                                           @PathVariable Long idQuestion) throws FalseAlternativesOnlyException, AlternativeCorrectDuplicateException, LimitOfAlternativesException {
+        List<AlternativeResponse> responses = new ArrayList<>();
+        for (AlternativeRequest a: alternativeRequests){
+            AlternativeResponse response = insertAlternative(a, idQuestion).getBody();
+            responses.add(response);
+        }
+        return ResponseEntity.ok(responses);
     }
 
     @Operation(tags = "Alternative", summary = "Update Alternative", responses ={

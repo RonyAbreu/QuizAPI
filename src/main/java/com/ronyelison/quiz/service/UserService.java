@@ -61,7 +61,7 @@ public class UserService {
         User removeUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
-        if (!loggedUser.equals(removeUser)){
+        if (loggedUser.userNotHavePermission(removeUser)){
             throw new UserNotHavePermissionException("Você não tem permissão para remover esse usuário");
         }
 
@@ -74,7 +74,7 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
-        if (!loggedUser.equals(user)){
+        if (loggedUser.userNotHavePermission(user)){
             throw new UserNotHavePermissionException("Você não tem permissão para atualizar esse usuário");
         }
 

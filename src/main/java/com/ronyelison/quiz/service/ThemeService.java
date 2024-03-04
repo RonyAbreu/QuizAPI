@@ -50,7 +50,7 @@ public class ThemeService {
 
         if (theme.containsQuestionsInTheList()){
             throw new DataIntegrityViolationException("Não é permitido remover um Tema que contém questões ligadas a ele");
-        } else if (!user.equals(theme.getCreator())) {
+        } else if (user.userNotHavePermission(theme.getCreator())) {
             throw new UserNotHavePermissionException("Usuário não tem permissão para remover esse tema");
         }
 
@@ -58,12 +58,12 @@ public class ThemeService {
     }
 
     public List<ThemeResponse> findAllThemes(){
-        if (repository.findAll().isEmpty()){
+        List<Theme> themes = repository.findAll();
+        if (themes.isEmpty()){
             throw new ThemeNotFoundException("Nenhum tema foi cadastrado");
         }
 
-        return repository.findAll()
-                .stream()
+        return themes.stream()
                 .map(Theme::entityToResponse)
                 .toList();
     }
@@ -80,7 +80,7 @@ public class ThemeService {
         Theme theme = repository.findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException("Tema não encontrado"));
 
-        if (!user.equals(theme.getCreator())){
+        if (user.userNotHavePermission(theme.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para atualizar esse tema");
         }
 

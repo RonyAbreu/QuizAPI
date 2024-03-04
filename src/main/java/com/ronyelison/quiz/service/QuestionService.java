@@ -51,7 +51,7 @@ public class QuestionService {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"));
 
-        if (!user.equals(question.getCreator())){
+        if (user.userNotHavePermission(question.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para remover essa questão");
         }
 
@@ -102,7 +102,7 @@ public class QuestionService {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"));
 
-        if (!user.equals(question.getCreator())){
+        if (user.userNotHavePermission(question.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para atualizar essa questão");
         }
 

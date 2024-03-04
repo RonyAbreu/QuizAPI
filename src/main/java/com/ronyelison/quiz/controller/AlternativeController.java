@@ -7,6 +7,7 @@ import com.ronyelison.quiz.service.AlternativeService;
 import com.ronyelison.quiz.service.exception.AlternativeCorrectDuplicateException;
 import com.ronyelison.quiz.service.exception.FalseAlternativesOnlyException;
 import com.ronyelison.quiz.service.exception.LimitOfAlternativesException;
+import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -73,7 +74,8 @@ public class AlternativeController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AlternativeResponse> updateAlternative(@PathVariable Long id, @RequestBody @Valid AlternativeUpdate alternativeUpdate){
-        return ResponseEntity.ok(service.updateAlternative(id, alternativeUpdate));
+    public ResponseEntity<AlternativeResponse> updateAlternative(@PathVariable Long id, @RequestBody @Valid AlternativeUpdate alternativeUpdate,
+                                                                 @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
+        return ResponseEntity.ok(service.updateAlternative(id, alternativeUpdate, token));
     }
 }

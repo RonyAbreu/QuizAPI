@@ -20,9 +20,9 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
     private List<Theme> themes = new ArrayList<>();
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
     private List<Question> questions = new ArrayList<>();
 
     public User(){
@@ -46,6 +46,10 @@ public class User implements UserDetails {
 
     public void addQuestion(Question question){
         this.questions.add(question);
+    }
+
+    public boolean userNotHavePermission(User user){
+        return !this.equals(user) && this.getRole() == Role.USER;
     }
 
     public String getName() {
@@ -109,5 +113,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }

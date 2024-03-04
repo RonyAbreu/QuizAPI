@@ -32,10 +32,6 @@ public class Alternative {
         return id;
     }
 
-    public String getResponse() {
-        return response;
-    }
-
     public void setResponse(String response) {
         this.response = response;
     }
@@ -44,7 +40,11 @@ public class Alternative {
         return correct;
     }
 
-    public void setCorrect(Boolean correct) {
-        this.correct = correct;
+    public Question getQuestion() {
+        return question;
+    }
+
+    public User getQuestionCreator(){
+        return question.getCreator();
     }
 }

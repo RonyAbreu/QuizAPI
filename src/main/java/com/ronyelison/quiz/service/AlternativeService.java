@@ -5,6 +5,7 @@ import com.ronyelison.quiz.dto.alternative.AlternativeResponse;
 import com.ronyelison.quiz.dto.alternative.AlternativeUpdate;
 import com.ronyelison.quiz.entity.Alternative;
 import com.ronyelison.quiz.entity.Question;
+import com.ronyelison.quiz.entity.User;
 import com.ronyelison.quiz.repository.AlternativeRepository;
 import com.ronyelison.quiz.repository.QuestionRepository;
 import com.ronyelison.quiz.service.exception.*;
@@ -15,11 +16,14 @@ import org.springframework.stereotype.Service;
 public class AlternativeService {
     private AlternativeRepository alternativeRepository;
     private QuestionRepository questionRepository;
+    private UserService userService;
 
     @Autowired
-    public AlternativeService(AlternativeRepository alternativeRepository, QuestionRepository questionRepository) {
+    public AlternativeService(AlternativeRepository alternativeRepository, QuestionRepository questionRepository,
+                              UserService userService) {
         this.alternativeRepository = alternativeRepository;
         this.questionRepository = questionRepository;
+        this.userService = userService;
     }
 
     public AlternativeResponse insertAlternative(AlternativeRequest alternativeRequest, Long idQuestion)
@@ -68,9 +72,14 @@ public class AlternativeService {
         return fakeAlternatives == 3;
     }
 
-    public AlternativeResponse updateAlternative(Long id, AlternativeUpdate alternativeUpdate){
+    public AlternativeResponse updateAlternative(Long id, AlternativeUpdate alternativeUpdate, String token) throws UserNotHavePermissionException {
+        User user = userService.findUserByToken(token);
         Alternative alternative = alternativeRepository.findById(id)
                 .orElseThrow(() -> new AlternativeNotFoundException("Alternativa não encontrada"));
+
+        if (user.userNotHavePermission(alternative.getQuestionCreator())){
+            throw new UserNotHavePermissionException("Usuário não tem permissão para atualizar essa alternativa");
+        }
 
         updateData(alternative, alternativeUpdate);
         alternativeRepository.save(alternative);

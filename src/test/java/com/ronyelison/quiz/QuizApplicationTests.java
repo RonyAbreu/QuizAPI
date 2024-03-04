@@ -1,13 +1,17 @@
 package com.ronyelison.quiz;
 
-import org.junit.jupiter.api.Test;
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class QuizApplicationTests {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class QuizApplicationTests {
 
-	@Test
-	void contextLoads() {
+	@BeforeAll
+	public static void setUp(){
+		RestAssured.port = 8080;
+		RestAssured.baseURI = "http://localhost:8080";
+		RestAssured.basePath = "/api/v1";
 	}
 
 }

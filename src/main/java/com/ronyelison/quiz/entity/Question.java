@@ -38,6 +38,14 @@ public class Question {
         this.creator = creator;
     }
 
+    public Question(Long id, String title, String imageUrl, Theme theme, User creator) {
+        this.id = id;
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.theme = theme;
+        this.creator = creator;
+    }
+
     public QuestionResponse entityToResponse(){
         return new QuestionResponse(id,title,imageUrl,theme.entityToResponse(),
                 alternatives.stream().map(Alternative::entityToResponse).toList());

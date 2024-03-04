@@ -36,6 +36,14 @@ public class User implements UserDetails {
         this.role = Role.USER;
     }
 
+    public User(UUID uuid, String name, String email, String password, Role role) {
+        this.uuid = uuid;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     public UserResponse entityToResponse(){
         return new UserResponse(uuid,name,email);
     }

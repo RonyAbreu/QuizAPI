@@ -26,6 +26,12 @@ public class Theme {
         this.creator = creator;
     }
 
+    public Theme(Long id, String name, User creator) {
+        this.id = id;
+        this.name = name;
+        this.creator = creator;
+    }
+
     public ThemeResponse entityToResponse(){
         return new ThemeResponse(id, name);
     }

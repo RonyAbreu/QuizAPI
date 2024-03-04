@@ -24,6 +24,13 @@ public class Alternative {
         this.question = question;
     }
 
+    public Alternative(Long id, String response, Boolean correct, Question question) {
+        this.id = id;
+        this.response = response;
+        this.correct = correct;
+        this.question = question;
+    }
+
     public AlternativeResponse entityToResponse(){
         return new AlternativeResponse(id, response,correct);
     }

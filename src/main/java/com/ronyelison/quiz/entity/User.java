@@ -44,6 +44,12 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     public UserResponse entityToResponse(){
         return new UserResponse(uuid,name,email);
     }
@@ -125,5 +131,9 @@ public class User implements UserDetails {
 
     public Role getRole() {
         return role;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 }

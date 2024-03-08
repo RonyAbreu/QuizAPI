@@ -76,7 +76,7 @@ public class ThemeController {
         return ResponseEntity.ok(service.findThemeById(id));
     }
 
-    @Operation(tags = "Theme", summary = "Insert Theme", responses ={
+    @Operation(tags = "Theme", summary = "Update Theme", responses ={
             @ApiResponse(description = "Success", responseCode = "200", content = @Content(schema = @Schema(implementation = ThemeResponse.class))),
             @ApiResponse(description = "not Found", responseCode = "404", content = @Content()),
             @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content()),

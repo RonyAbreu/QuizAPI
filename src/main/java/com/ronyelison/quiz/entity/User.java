@@ -20,10 +20,12 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Theme> themes = new ArrayList<>();
-    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Response> responses = new ArrayList<>();
 
     public User(){
 
@@ -60,6 +62,10 @@ public class User implements UserDetails {
 
     public void addQuestion(Question question){
         this.questions.add(question);
+    }
+
+    public void addResponse(Response response){
+        this.responses.add(response);
     }
 
     public boolean userNotHavePermission(User user){

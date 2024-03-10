@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers("/", "/swagger-ui/**", "/v3/api-docs", "/h2/**").permitAll();
                     request.requestMatchers(HttpMethod.GET,"/api/v1/theme/**", "/api/v1/question/**").permitAll();
-                    request.requestMatchers(HttpMethod.GET, "/api/v1/user").hasRole("ADMIN");
+                    request.requestMatchers(HttpMethod.GET, "/api/v1/user", "/api/v1/response").hasRole("ADMIN");
                     request.requestMatchers(HttpMethod.POST,"/api/v1/user/**").permitAll().anyRequest().authenticated();
                 })
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))

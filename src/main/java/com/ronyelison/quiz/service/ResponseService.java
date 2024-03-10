@@ -11,8 +11,11 @@ import com.ronyelison.quiz.repository.ResponseRepository;
 import com.ronyelison.quiz.repository.UserRepository;
 import com.ronyelison.quiz.service.exception.AlternativeNotFoundException;
 import com.ronyelison.quiz.service.exception.QuestionNotFoundException;
+import com.ronyelison.quiz.service.exception.ResponseNotFoundException;
 import com.ronyelison.quiz.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -49,5 +52,29 @@ public class ResponseService {
         responseRepository.save(response);
 
         return response.entityToResponse();
+    }
+
+
+    public Page<ResponseDTO> findAllResponses(Pageable pageable){
+        Page<Response> responses = responseRepository.findAll(pageable);
+
+        if (responses.isEmpty()){
+            throw new ResponseNotFoundException("Nenhuma resposta foi cadastrada");
+        }
+
+        return responses.map(Response::entityToResponse);
+    }
+
+    public Page<ResponseDTO> findResponsesByUser(Pageable pageable, UUID userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new UserNotFoundException("usuário não encontrado"));
+
+        Page<Response> responses = responseRepository.findByUserUuid(pageable, userId);
+
+        if (responses.isEmpty()){
+            throw new ResponseNotFoundException("Esse usuário ainda não possui nenhuma resposta cadastrada");
+        }
+
+        return responses.map(Response::entityToResponse);
     }
 }

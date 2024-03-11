@@ -36,7 +36,7 @@ public class UserServiceTest {
     TokenProvider tokenProvider;
     @Mock
     PasswordEncoder passwordEncoder;
-    final String MOCK_TOKEN = "mockToken";
+
     
     @BeforeEach
     public void setUp(){
@@ -64,32 +64,32 @@ public class UserServiceTest {
     void removeUser() throws UserNotHavePermissionException {
         User userMock = mockUser.mockEntity(1);
 
-        Mockito.lenient().when(tokenProvider.getSubjectByToken(MOCK_TOKEN)).thenReturn(userMock.getEmail());
+        Mockito.lenient().when(tokenProvider.getSubjectByToken(MockUser.MOCK_TOKEN)).thenReturn(userMock.getEmail());
 
         Mockito.lenient().when(userRepository.findByEmail(userMock.getEmail())).thenReturn(userMock);
 
-        User userLogged = userService.findUserByToken(MOCK_TOKEN);
+        User userLogged = userService.findUserByToken(MockUser.MOCK_TOKEN);
 
         Mockito.lenient().when(userRepository.findById(userLogged.getUuid())).thenReturn(Optional.of(userLogged));
 
         userRepository.delete(userLogged);
-        userService.removeUser(userLogged.getUuid(),MOCK_TOKEN);
+        userService.removeUser(userLogged.getUuid(),MockUser.MOCK_TOKEN);
     }
 
     @Test
     void updateUser() throws UserNotHavePermissionException {
         User userMock = mockUser.mockEntity(1);
 
-        Mockito.lenient().when(tokenProvider.getSubjectByToken(MOCK_TOKEN)).thenReturn(userMock.getEmail());
+        Mockito.lenient().when(tokenProvider.getSubjectByToken(MockUser.MOCK_TOKEN)).thenReturn(userMock.getEmail());
 
         Mockito.lenient().when(userRepository.findByEmail(userMock.getEmail())).thenReturn(userMock);
 
-        User userLogged = userService.findUserByToken(MOCK_TOKEN);
+        User userLogged = userService.findUserByToken(MockUser.MOCK_TOKEN);
 
         Mockito.lenient().when(userRepository.findById(userLogged.getUuid())).thenReturn(Optional.of(userLogged));
 
         UserUpdate userUpdate = mockUser.mockUserUpdate();
-        UserResponse userResponse = userService.updateUser(userLogged.getUuid(), userUpdate, MOCK_TOKEN);
+        UserResponse userResponse = userService.updateUser(userLogged.getUuid(), userUpdate, MockUser.MOCK_TOKEN);
 
         assertNotNull(userResponse);
         assertEquals("Novo nome", userResponse.name());
@@ -101,11 +101,11 @@ public class UserServiceTest {
     void findUserByToken() {
         User userMock = mockUser.mockEntity(1);
 
-        Mockito.lenient().when(tokenProvider.getSubjectByToken(MOCK_TOKEN)).thenReturn(userMock.getEmail());
+        Mockito.lenient().when(tokenProvider.getSubjectByToken(MockUser.MOCK_TOKEN)).thenReturn(userMock.getEmail());
 
         Mockito.lenient().when(userRepository.findByEmail(userMock.getEmail())).thenReturn(userMock);
 
-        User result = userService.findUserByToken(MOCK_TOKEN);
+        User result = userService.findUserByToken(MockUser.MOCK_TOKEN);
 
         assertEquals(userMock.getEmail(), result.getEmail());
         assertEquals(userMock.getName(), result.getName());

@@ -9,6 +9,8 @@ import com.ronyelison.quiz.entity.enums.Role;
 import java.util.UUID;
 
 public class MockUser implements MockInterface<User, UserRequest>{
+    public static final String MOCK_TOKEN = "mockToken";
+
     @Override
     public User mockEntity(Integer num) {
         return new User(
@@ -27,10 +29,6 @@ public class MockUser implements MockInterface<User, UserRequest>{
                 "user@gmail.com",
                 "12345678"
         );
-    }
-
-    public UserLogin mockUserLogin(String email, String password){
-        return new UserLogin(email, password);
     }
 
     public UserUpdate mockUserUpdate(){

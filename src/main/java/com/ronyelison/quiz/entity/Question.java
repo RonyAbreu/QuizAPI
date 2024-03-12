@@ -1,11 +1,8 @@
 package com.ronyelison.quiz.entity;
 
+import com.ronyelison.quiz.dto.question.QuestionMinResponse;
 import com.ronyelison.quiz.dto.question.QuestionRequest;
 import com.ronyelison.quiz.dto.question.QuestionResponse;
-import com.ronyelison.quiz.service.ThemeService;
-import com.ronyelison.quiz.service.exception.AlternativeCorrectDuplicateException;
-import com.ronyelison.quiz.service.exception.FalseAlternativesOnlyException;
-import com.ronyelison.quiz.service.exception.LimitOfAlternativesException;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -49,6 +46,10 @@ public class Question {
     public QuestionResponse entityToResponse(){
         return new QuestionResponse(id,title,imageUrl,theme.entityToResponse(),
                 alternatives.stream().map(Alternative::entityToResponse).toList());
+    }
+
+    public QuestionMinResponse entityToMinResponse(){
+        return new QuestionMinResponse(id, title,imageUrl,theme.entityToResponse());
     }
 
     public void addAlternative(Alternative alternative) {

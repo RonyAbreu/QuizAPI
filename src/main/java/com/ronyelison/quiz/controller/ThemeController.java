@@ -15,6 +15,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -62,8 +65,10 @@ public class ThemeController {
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ThemeResponse>> findAllThemes(){
-        return ResponseEntity.ok(service.findAllThemes());
+    public ResponseEntity<Page<ThemeResponse>> findAllThemes(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                             @RequestParam(value = "size", defaultValue = "30") Integer size){
+        Pageable pageable = PageRequest.of(page,size);
+        return ResponseEntity.ok(service.findAllThemes(pageable));
     }
 
     @Operation(tags = "Theme", summary = "Find Theme", responses ={

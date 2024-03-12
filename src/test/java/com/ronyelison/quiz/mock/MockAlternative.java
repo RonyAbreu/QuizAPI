@@ -1,6 +1,7 @@
 package com.ronyelison.quiz.mock;
 
 import com.ronyelison.quiz.dto.alternative.AlternativeRequest;
+import com.ronyelison.quiz.dto.alternative.AlternativeUpdate;
 import com.ronyelison.quiz.entity.Alternative;
 import com.ronyelison.quiz.entity.Question;
 
@@ -22,6 +23,14 @@ public class MockAlternative implements MockInterface<Alternative, AlternativeRe
 
     @Override
     public AlternativeRequest mockDTO(Integer num) {
-        return null;
+        return new AlternativeRequest("Alternative", false);
+    }
+
+    public AlternativeRequest mockAlternativeRequest(Boolean correct){
+        return new AlternativeRequest("Alternative", correct);
+    }
+
+    public AlternativeUpdate mockAlternativeUpdate(){
+        return new AlternativeUpdate("Nova Alternativa");
     }
 }

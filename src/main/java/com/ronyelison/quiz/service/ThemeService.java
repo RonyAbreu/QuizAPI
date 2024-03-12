@@ -11,6 +11,8 @@ import com.ronyelison.quiz.service.exception.ThemeNotFoundException;
 import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,15 +59,13 @@ public class ThemeService {
         repository.delete(theme);
     }
 
-    public List<ThemeResponse> findAllThemes(){
-        List<Theme> themes = repository.findAll();
+    public Page<ThemeResponse> findAllThemes(Pageable pageable){
+        Page<Theme> themes = repository.findAll(pageable);
         if (themes.isEmpty()){
             throw new ThemeNotFoundException("Nenhum tema foi cadastrado");
         }
 
-        return themes.stream()
-                .map(Theme::entityToResponse)
-                .toList();
+        return themes.map(Theme::entityToResponse);
     }
 
     public ThemeResponse findThemeById(Long id){

@@ -41,7 +41,7 @@ public class ResponseService {
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
         Question question = questionRepository.findById(idQuestion)
-                .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"));
+                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"));
 
         Alternative alternative = alternativeRepository.findById(idAlternative)
                 .orElseThrow(() -> new AlternativeNotFoundException("Alternativa não encontrada"));
@@ -67,7 +67,7 @@ public class ResponseService {
 
     public Page<ResponseDTO> findResponsesByUser(Pageable pageable, UUID userId){
         User user = userRepository.findById(userId)
-                .orElseThrow(()-> new UserNotFoundException("usuário não encontrado"));
+                .orElseThrow(()-> new UserNotFoundException("Usuário não encontrado"));
 
         Page<Response> responses = responseRepository.findByUserUuid(pageable, userId);
 

@@ -11,7 +11,10 @@ import com.ronyelison.quiz.mock.MockTheme;
 import com.ronyelison.quiz.mock.MockUser;
 import com.ronyelison.quiz.repository.QuestionRepository;
 import com.ronyelison.quiz.repository.ThemeRepository;
+import com.ronyelison.quiz.service.exception.QuestionNotFoundException;
+import com.ronyelison.quiz.service.exception.ThemeNotFoundException;
 import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
+import com.ronyelison.quiz.util.Messages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +74,23 @@ class QuestionServiceTest {
     }
 
     @Test
+    void insertQuestionWithThemeNotFound() {
+        QuestionRequest questionRequest = mockQuestion.mockDTO(1);
+        User creator = mockUser.mockEntity(1);
+        Theme theme = mockTheme.mockEntity(1);
+        Theme falseTheme = mockTheme.mockEntity(2);
+
+        Mockito.lenient().when(userService.findUserByToken(MockUser.MOCK_TOKEN)).thenReturn(creator);
+        Mockito.lenient().when(themeRepository.findById(theme.getId())).thenReturn(Optional.of(theme));
+
+        Exception e = assertThrows(ThemeNotFoundException.class, () ->{
+            questionService.insertQuestion(questionRequest, falseTheme.getId(), MockUser.MOCK_TOKEN);
+        });
+
+        assertEquals(e.getMessage(), Messages.THEME_NOT_FOUND);
+    }
+
+    @Test
     void removeQuestion() {
         User user = mockUser.mockEntity(1);
         Question question = mockQuestion.mockEntity(1, new Theme(), user);
@@ -80,6 +101,38 @@ class QuestionServiceTest {
         assertDoesNotThrow(() -> questionService.removeQuestion(question.getId(), MockUser.MOCK_TOKEN));
 
         verify(questionRepository, times(1)).delete(question);
+    }
+
+    @Test
+    void removeQuestionNotFound() {
+        User user = mockUser.mockEntity(1);
+        Question question = mockQuestion.mockEntity(1, new Theme(), user);
+        Question falseQuestion = mockQuestion.mockEntity(2);
+
+        Mockito.lenient().when(userService.findUserByToken(MockUser.MOCK_TOKEN)).thenReturn(user);
+        Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
+
+        Exception e = assertThrows(QuestionNotFoundException.class, () ->{
+            questionService.removeQuestion(falseQuestion.getId(), MockUser.MOCK_TOKEN);
+        });
+
+        assertEquals(e.getMessage(), Messages.QUESTION_NOT_FOUND);
+    }
+
+    @Test
+    void removeQuestionNotHavePermission() {
+        User user = mockUser.mockEntity(1);
+        User falseUser = mockUser.mockEntity(2);
+        Question question = mockQuestion.mockEntity(1, new Theme(), user);
+
+        Mockito.lenient().when(userService.findUserByToken(MockUser.MOCK_TOKEN)).thenReturn(falseUser);
+        Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
+
+        Exception e = assertThrows(UserNotHavePermissionException.class, () ->{
+            questionService.removeQuestion(question.getId(), MockUser.MOCK_TOKEN);
+        });
+
+        assertEquals(e.getMessage(), Messages.USER_NOT_HAVE_PERMISSION_FOR_REMOVE_QUESTION);
     }
 
     @Test
@@ -97,6 +150,21 @@ class QuestionServiceTest {
     }
 
     @Test
+    void findAllQuestionsNotFound() {
+        Pageable pageable = mock(Pageable.class);
+
+        List<Question> questionList = new ArrayList<>();
+        Page<Question> questionPage = new PageImpl<>(questionList);
+        Mockito.lenient().when(questionRepository.findAll(pageable)).thenReturn(questionPage);
+
+        Exception e = assertThrows(QuestionNotFoundException.class, () ->{
+            questionService.findAllQuestions(pageable);
+        });
+
+        assertEquals(e.getMessage(), Messages.LIST_OF_QUESTIONS_NOT_FOUND);
+    }
+
+    @Test
     void find10QuestionsByThemeId() {
         Theme theme = mockTheme.mockEntity(1);
         List<Question> questionList = mockQuestion.mockList(10);
@@ -105,6 +173,19 @@ class QuestionServiceTest {
 
         assertEquals(10, result.size());
         assertEquals("Question", result.getFirst().title());
+    }
+
+    @Test
+    void find10QuestionsByThemeIdNotFound() {
+        Theme theme = mockTheme.mockEntity(1);
+        List<Question> questionList = new ArrayList<>();
+        Mockito.lenient().when(questionRepository.find10QuestionsByThemeId(theme.getId())).thenReturn(questionList);
+
+        Exception e = assertThrows(QuestionNotFoundException.class, () -> {
+            questionService.find10QuestionsByThemeId(theme.getId());
+        });
+
+        assertEquals(e.getMessage(), Messages.NOT_FOUND_QUESTIONS_BY_THEME);
     }
 
     @Test
@@ -117,6 +198,20 @@ class QuestionServiceTest {
         assertNotNull(result);
         assertNotNull(result.imageUrl());
         assertEquals("Question", result.title());
+    }
+
+    @Test
+    void findQuestionByIdNotFound() {
+        Question question = mockQuestion.mockEntity(1);
+        Question falseQuestion = mockQuestion.mockEntity(2);
+
+        Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
+
+        Exception e = assertThrows(QuestionNotFoundException.class, () ->{
+            questionService.findQuestionById(falseQuestion.getId());
+        });
+
+        assertEquals(e.getMessage(), Messages.QUESTION_NOT_FOUND);
     }
 
     @Test
@@ -137,6 +232,23 @@ class QuestionServiceTest {
     }
 
     @Test
+    void findQuestionByThemeNotFound() {
+        Pageable pageable = mock(Pageable.class);
+        Theme theme = mockTheme.mockEntity(1);
+
+        List<Question> questionList = new ArrayList<>();
+        Page<Question> questionPage = new PageImpl<>(questionList);
+
+        Mockito.lenient().when(questionRepository.findByThemeId(theme.getId(), pageable)).thenReturn(questionPage);
+
+        Exception e = assertThrows(QuestionNotFoundException.class, () ->{
+            questionService.findQuestionByThemeId(theme.getId(), pageable);
+        });
+
+        assertEquals(e.getMessage(), Messages.NOT_FOUND_QUESTIONS_BY_THEME);
+    }
+
+    @Test
     void updateQuestion() throws UserNotHavePermissionException {
         QuestionUpdate questionUpdate = mockQuestion.mockQuestionUpdate();
         User user = mockUser.mockEntity(1);
@@ -151,5 +263,39 @@ class QuestionServiceTest {
         assertNotNull(result);
         assertEquals("Novo titulo", result.title());
         assertEquals("Nova url", result.imageUrl());
+    }
+
+    @Test
+    void updateQuestionNotFound(){
+        QuestionUpdate questionUpdate = mockQuestion.mockQuestionUpdate();
+        User user = mockUser.mockEntity(1);
+        Question question = mockQuestion.mockEntity(1,new Theme(), user);
+        Question falseQuestion = mockQuestion.mockEntity(2);
+
+        Mockito.lenient().when(userService.findUserByToken(MockUser.MOCK_TOKEN)).thenReturn(user);
+        Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
+
+        Exception e = assertThrows(QuestionNotFoundException.class, () ->{
+            questionService.updateQuestion(falseQuestion.getId(), questionUpdate, MockUser.MOCK_TOKEN);
+        });
+
+        assertEquals(e.getMessage(), Messages.QUESTION_NOT_FOUND);
+    }
+
+    @Test
+    void updateQuestionNotHavePermission(){
+        QuestionUpdate questionUpdate = mockQuestion.mockQuestionUpdate();
+        User user = mockUser.mockEntity(1);
+        User falseUser = mockUser.mockEntity(2);
+        Question question = mockQuestion.mockEntity(1,new Theme(), user);
+
+        Mockito.lenient().when(userService.findUserByToken(MockUser.MOCK_TOKEN)).thenReturn(falseUser);
+        Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
+
+        Exception e = assertThrows(UserNotHavePermissionException.class, () ->{
+            questionService.updateQuestion(question.getId(), questionUpdate, MockUser.MOCK_TOKEN);
+        });
+
+        assertEquals(e.getMessage(), Messages.USER_NOT_HAVE_PERMISSION_FOR_UPDATE_QUESTION);
     }
 }

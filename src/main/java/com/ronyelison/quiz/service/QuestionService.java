@@ -49,7 +49,7 @@ public class QuestionService {
     public void removeQuestion(Long id, String token) throws UserNotHavePermissionException {
         User user = userService.findUserByToken(token);
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"));
+                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"));
 
         if (user.userNotHavePermission(question.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para remover essa questão");
@@ -73,7 +73,7 @@ public class QuestionService {
         List<Question> questions = questionRepository.find10QuestionsByThemeId(id);
 
         if (questions.isEmpty()){
-            throw new QuestionNotFoundException("Não existe nenhum Questão ligada a esse Tema");
+            throw new QuestionNotFoundException("Não existe nenhuma Questão ligada a esse Tema");
         }
 
         return questions.stream().map(Question::entityToResponse).toList();
@@ -82,7 +82,7 @@ public class QuestionService {
     public QuestionResponse findQuestionById(Long id){
         return questionRepository
                 .findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"))
+                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"))
                 .entityToResponse();
     }
 
@@ -90,7 +90,7 @@ public class QuestionService {
         Page<Question> questionPage = questionRepository.findByThemeId(id, pageable);
 
         if (questionPage.isEmpty()){
-            throw new QuestionNotFoundException("Não existe nenhum Questão ligada a esse Tema");
+            throw new QuestionNotFoundException("Não existe nenhuma Questão ligada a esse Tema");
         }
 
         return questionPage.map(Question::entityToResponse);
@@ -100,7 +100,7 @@ public class QuestionService {
         User user = userService.findUserByToken(token);
 
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("Questão não encontrada"));
+                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"));
 
         if (user.userNotHavePermission(question.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para atualizar essa questão");

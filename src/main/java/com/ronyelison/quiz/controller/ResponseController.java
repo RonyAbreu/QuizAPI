@@ -43,4 +43,12 @@ public class ResponseController {
         Pageable pageable = PageRequest.of(page,size);
         return ResponseEntity.ok(service.findResponsesByUser(pageable, userId));
     }
+
+    @GetMapping(value = "/creator/{idCreator}")
+    public ResponseEntity<Page<ResponseDTO>> findResponsesByQuestionCreator(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                            @RequestParam(value = "size", defaultValue = "20") Integer size,
+                                                                            @PathVariable UUID idCreator){
+        Pageable pageable = PageRequest.of(page,size);
+        return ResponseEntity.ok(service.findResponsesByQuestionCreator(pageable,idCreator));
+    }
 }

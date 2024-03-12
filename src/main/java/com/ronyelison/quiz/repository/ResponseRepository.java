@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface ResponseRepository extends JpaRepository<Response,Long> {
     Page<Response> findByUserUuid(Pageable pageable, UUID uuid);
+    Page<Response> findByQuestionCreatorUuid(Pageable pageable, UUID uuid);
 }

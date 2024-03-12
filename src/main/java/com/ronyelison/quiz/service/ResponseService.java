@@ -77,4 +77,17 @@ public class ResponseService {
 
         return responses.map(Response::entityToResponse);
     }
+
+    public Page<ResponseDTO> findResponsesByQuestionCreator(Pageable pageable, UUID creatorId){
+        User user = userRepository.findById(creatorId)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
+
+        Page<Response> responses = responseRepository.findByQuestionCreatorUuid(pageable, creatorId);
+
+        if (responses.isEmpty()){
+            throw new ResponseNotFoundException("Essa questão ainda não possui resposta cadastrada");
+        }
+
+        return responses.map(Response::entityToResponse);
+    }
 }

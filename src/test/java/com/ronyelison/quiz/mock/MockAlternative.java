@@ -26,6 +26,10 @@ public class MockAlternative implements MockInterface<Alternative, AlternativeRe
         return new AlternativeRequest("Alternative", false);
     }
 
+    public AlternativeRequest mockAlternativeRequest(Boolean correct){
+        return new AlternativeRequest("Alternative", correct);
+    }
+
     public AlternativeUpdate mockAlternativeUpdate(){
         return new AlternativeUpdate("Nova Alternativa");
     }

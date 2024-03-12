@@ -12,6 +12,7 @@ import com.ronyelison.quiz.service.exception.InvalidUserException;
 import com.ronyelison.quiz.service.exception.UserAlreadyExistsException;
 import com.ronyelison.quiz.service.exception.UserNotFoundException;
 import com.ronyelison.quiz.service.exception.UserNotHavePermissionException;
+import com.ronyelison.quiz.util.Messages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,7 +76,7 @@ public class UserServiceTest {
             userService.registerUser(userRequest);
         });
 
-        assertEquals(e.getMessage(), "Tente se registrar com outro email");
+        assertEquals(e.getMessage(), Messages.USER_ALREADY_EXISTS_MESSAGE);
     }
 
     @Test
@@ -112,7 +113,7 @@ public class UserServiceTest {
             userService.removeUser(userFalse.getUuid(),MockUser.MOCK_TOKEN);
         });
 
-        assertEquals(e.getMessage(), "Usuário não encontrado");
+        assertEquals(e.getMessage(), Messages.USER_NOT_FOUND_MESSAGE);
     }
 
     @Test
@@ -132,7 +133,7 @@ public class UserServiceTest {
             userService.removeUser(userMock.getUuid(),MockUser.MOCK_TOKEN);
         });
 
-        assertEquals(e.getMessage(), "Você não tem permissão para remover esse usuário");
+        assertEquals(e.getMessage(), Messages.USER_NOT_HAVE_PERMISSION_FOR_REMOVE);
     }
 
     @Test
@@ -175,7 +176,7 @@ public class UserServiceTest {
             userService.updateUser(userFalse.getUuid(), userUpdate, MockUser.MOCK_TOKEN);
         });
 
-        assertEquals(e.getMessage(), "Usuário não encontrado");
+        assertEquals(e.getMessage(), Messages.USER_NOT_FOUND_MESSAGE);
 
     }
 
@@ -198,7 +199,7 @@ public class UserServiceTest {
             userService.updateUser(userFalse.getUuid(), userUpdate, MockUser.MOCK_TOKEN);
         });
 
-        assertEquals(e.getMessage(), "Você não tem permissão para atualizar esse usuário");
+        assertEquals(e.getMessage(), Messages.USER_NOT_HAVE_PERMISSION_FOR_UPDATE);
 
     }
 
@@ -228,6 +229,6 @@ public class UserServiceTest {
             userService.findUserByToken(MockUser.MOCK_TOKEN);
         });
 
-        assertEquals(e.getMessage(), "Usuário inválido, pode ter sido removido do BD e utilizado o token");
+        assertEquals(e.getMessage(), Messages.INVALID_USER_MESSAGE);
     }
 }

@@ -84,4 +84,10 @@ public class ResponseController {
         Pageable pageable = PageRequest.of(page,size);
         return ResponseEntity.ok(service.findResponsesByQuestionCreator(pageable,idCreator));
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> removeResponse(@PathVariable Long id){
+        service.removeResponse(id);
+        return ResponseEntity.noContent().build();
+    }
 }

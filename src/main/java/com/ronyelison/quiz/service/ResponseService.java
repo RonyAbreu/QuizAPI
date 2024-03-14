@@ -54,6 +54,13 @@ public class ResponseService {
         return response.entityToResponse();
     }
 
+    public void removeResponse(Long idResponse){
+        Response response = responseRepository.findById(idResponse)
+                .orElseThrow(() -> new ResponseNotFoundException("Resposta não encontrada"));
+
+        responseRepository.delete(response);
+    }
+
 
     public Page<ResponseDTO> findAllResponses(Pageable pageable){
         Page<Response> responses = responseRepository.findAll(pageable);

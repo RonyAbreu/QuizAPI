@@ -4,6 +4,7 @@ import com.ronyelison.quiz.dto.user.TokenResponse;
 import com.ronyelison.quiz.dto.user.UserLogin;
 import com.ronyelison.quiz.dto.user.UserRequest;
 import com.ronyelison.quiz.dto.user.UserResponse;
+import com.ronyelison.quiz.mock.MockUser;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -59,5 +60,10 @@ public class UserRequestUtil {
                 .statusCode(204)
                 .extract()
                 .response();
+    }
+
+    public static void delete(UserResponse userResponse){
+        String token = login(new MockUser().mockUserLogin());
+        delete(userResponse.uuid(), token);
     }
 }

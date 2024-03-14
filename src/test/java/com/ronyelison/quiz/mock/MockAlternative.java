@@ -22,7 +22,7 @@ public class MockAlternative implements MockInterface<Alternative, AlternativeRe
     }
 
     @Override
-    public AlternativeRequest mockDTO(Integer num) {
+    public AlternativeRequest mockRequest(Integer num) {
         return new AlternativeRequest("Alternative", false);
     }
 

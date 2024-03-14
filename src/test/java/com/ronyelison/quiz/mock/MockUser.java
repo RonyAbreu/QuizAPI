@@ -23,7 +23,7 @@ public class MockUser implements MockInterface<User, UserRequest>{
     }
 
     @Override
-    public UserRequest mockDTO(Integer num) {
+    public UserRequest mockRequest(Integer num) {
         return new UserRequest(
                 "User" + num,
                 "user@gmail.com",

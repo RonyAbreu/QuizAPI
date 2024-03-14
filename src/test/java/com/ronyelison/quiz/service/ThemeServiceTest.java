@@ -23,7 +23,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ class ThemeServiceTest {
 
     @Test
     void insertTheme() throws ThemeAlreadyExistsException {
-        ThemeRequest themeRequest = mockTheme.mockDTO(1);
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
         User user = mockUser.mockEntity(1);
         Theme theme = mockTheme.mockEntity(1);
 
@@ -71,7 +70,7 @@ class ThemeServiceTest {
 
     @Test
     void insertThemeAlreadyExists() {
-        ThemeRequest themeRequest = mockTheme.mockDTO(1);
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
         User user = mockUser.mockEntity(1);
         Theme theme = mockTheme.mockEntity(1);
 

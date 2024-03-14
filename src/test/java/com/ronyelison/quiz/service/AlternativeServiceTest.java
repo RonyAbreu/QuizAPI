@@ -21,8 +21,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,7 +50,7 @@ class AlternativeServiceTest {
     void insertAlternative() throws FalseAlternativesOnlyException, AlternativeCorrectDuplicateException, LimitOfAlternativesException {
         Alternative alternative = mockAlternative.mockEntity(1);
 
-        AlternativeRequest alternativeRequest = mockAlternative.mockDTO(1);
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
         Question question = mockQuestion.mockEntity(1, new Theme(), new User());
 
         Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
@@ -66,7 +64,7 @@ class AlternativeServiceTest {
 
     @Test
     void insertAlternativeWithQuestionNotFound(){
-        AlternativeRequest alternativeRequest = mockAlternative.mockDTO(1);
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
         Question question = mockQuestion.mockEntity(1, new Theme(), new User());
         Question falseQuestion = mockQuestion.mockEntity(2);
 
@@ -83,7 +81,7 @@ class AlternativeServiceTest {
     void insertAlternativesWithMoreThanTheLimit(){
         Question question = mockQuestion.mockEntity(1, new Theme(), new User());
 
-        AlternativeRequest alternativeRequest = mockAlternative.mockDTO(1);
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
         AlternativeRequest alternativeTrue = mockAlternative.mockAlternativeRequest(true);
 
         Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
@@ -120,7 +118,7 @@ class AlternativeServiceTest {
     void insertAlternativesFalsesOnly(){
         Question question = mockQuestion.mockEntity(1, new Theme(), new User());
 
-        AlternativeRequest alternativeRequest = mockAlternative.mockDTO(1);
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
 
         Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
 

@@ -34,4 +34,8 @@ public class MockUser implements MockInterface<User, UserRequest>{
     public UserUpdate mockUserUpdate(){
         return new UserUpdate("Novo nome");
     }
+
+    public UserLogin mockUserLogin(){
+        return new UserLogin("user@gmail.com", "12345678");
+    }
 }

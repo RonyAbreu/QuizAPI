@@ -5,6 +5,9 @@ Com ela pode-se criar Questões com suas respectivas alternativas e de Temas esp
 
 ![GitHub](https://img.shields.io/github/license/a4s-ufpb/EducAPI?label=licence) ![Type Badge](https://img.shields.io/badge/project%3A-Apps4Society-informational)
 
+## :game_die: Modelo Relacional
+![mr.png](mr.png)
+
 ## 🛠 Tecnologias
 
 Para rodar o projeto localmente devem ser instaladas as seguintes tecnologias:

@@ -71,6 +71,14 @@ public class ThemeController {
         return ResponseEntity.ok(service.findAllThemes(pageable));
     }
 
+    @GetMapping(value = "/search")
+    public ResponseEntity<Page<ThemeResponse>> findThemesByName(@RequestParam(value = "name", defaultValue = "") String name,
+                                                                @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                @RequestParam(value = "size", defaultValue = "30") Integer size){
+        Pageable pageable = PageRequest.of(page,size);
+        return ResponseEntity.ok(service.findThemesByName(name, pageable));
+    }
+
     @Operation(tags = "Theme", summary = "Find Theme", responses ={
             @ApiResponse(description = "Success", responseCode = "200", content = @Content(schema = @Schema(implementation = ThemeResponse.class))),
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),

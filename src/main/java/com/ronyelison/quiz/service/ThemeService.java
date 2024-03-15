@@ -15,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ThemeService {
     private ThemeRepository repository;
@@ -72,6 +70,16 @@ public class ThemeService {
         return repository.findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException("Tema não encontrado"))
                 .entityToResponse();
+    }
+
+    public Page<ThemeResponse> findThemesByName(String name, Pageable pageable){
+        Page<Theme> themes = repository.findByNameStartsWithIgnoreCase(name, pageable);
+
+        if (themes.isEmpty()){
+            throw new ThemeNotFoundException("Nenhum tema foi cadastrado com esse nome");
+        }
+
+        return themes.map(Theme::entityToResponse);
     }
 
     public ThemeResponse updateTheme(Long id, ThemeUpdate themeUpdate, String token) throws UserNotHavePermissionException {

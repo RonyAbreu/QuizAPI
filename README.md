@@ -5,6 +5,9 @@ Com ela pode-se criar Questões com suas respectivas alternativas e de Temas esp
 
 ![GitHub](https://img.shields.io/github/license/a4s-ufpb/EducAPI?label=licence) ![Type Badge](https://img.shields.io/badge/project%3A-Apps4Society-informational)
 
+## :game_die: Modelo Relacional
+![mr.png](mr.png)
+
 ## 🛠 Tecnologias
 
 Para rodar o projeto localmente devem ser instaladas as seguintes tecnologias:
@@ -61,7 +64,6 @@ PostgreSQL(dev):
     APP_VERSION=v1.0.0
     APP_PROFILE=dev
     APP_SECRET=quizapi-dev
-    APP_PROFILE=dev
     DEV_USER=postgres
     DEV_PASSWORD=1234
     DEV_DB=quiz_api
@@ -80,7 +82,7 @@ PostgreSQL(dev):
 H2(test):
 
     APP_VERSION=v1.0.0
-    APP_PROFILE=dev
+    APP_PROFILE=test
     APP_SECRET=quizapi-dev
 
 ## :arrow_forward: Rodando o projeto

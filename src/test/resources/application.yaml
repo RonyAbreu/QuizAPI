@@ -1,3 +1,7 @@
+app:
+  version: v1.0.0
+  secret: secret
+
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -17,7 +21,3 @@ spring:
 
 cors:
   origins: http://127.0.0.1:5500,http://localhots:3000
-
-app:
-  version: v1.0.0
-  secret: secret

@@ -26,7 +26,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +56,7 @@ class QuestionServiceTest {
 
     @Test
     void insertQuestion() {
-        QuestionRequest questionRequest = mockQuestion.mockDTO(1);
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
         User creator = mockUser.mockEntity(1);
         Theme theme = mockTheme.mockEntity(1);
         Question question = mockQuestion.mockEntity(1);
@@ -75,7 +74,7 @@ class QuestionServiceTest {
 
     @Test
     void insertQuestionWithThemeNotFound() {
-        QuestionRequest questionRequest = mockQuestion.mockDTO(1);
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
         User creator = mockUser.mockEntity(1);
         Theme theme = mockTheme.mockEntity(1);
         Theme falseTheme = mockTheme.mockEntity(2);

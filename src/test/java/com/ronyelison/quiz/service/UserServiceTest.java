@@ -54,7 +54,7 @@ public class UserServiceTest {
     @Test
     void registerUser() throws UserAlreadyExistsException {
         User user = mockUser.mockEntity(1);
-        UserRequest userRequest = mockUser.mockDTO(1);
+        UserRequest userRequest = mockUser.mockRequest(1);
 
         Mockito.lenient().when(userRepository.save(user)).thenReturn(user);
 
@@ -68,7 +68,7 @@ public class UserServiceTest {
     @Test
     void registerUserAlreadyExists() {
         User user = mockUser.mockEntity(1);
-        UserRequest userRequest = mockUser.mockDTO(1);
+        UserRequest userRequest = mockUser.mockRequest(1);
 
         Mockito.lenient().when(userRepository.findByEmail(userRequest.email())).thenReturn(user);
 

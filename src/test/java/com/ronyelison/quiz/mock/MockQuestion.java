@@ -30,7 +30,7 @@ public class MockQuestion implements MockInterface<Question, QuestionRequest>{
     }
 
     @Override
-    public QuestionRequest mockDTO(Integer num) {
+    public QuestionRequest mockRequest(Integer num) {
         return new QuestionRequest("Question",
                 "imagem.com");
     }

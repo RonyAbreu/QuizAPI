@@ -23,7 +23,7 @@ public class MockTheme implements MockInterface<Theme, ThemeRequest>{
     }
 
     @Override
-    public ThemeRequest mockDTO(Integer num) {
+    public ThemeRequest mockRequest(Integer num) {
         return new ThemeRequest("Tema");
     }
 

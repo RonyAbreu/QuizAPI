@@ -64,7 +64,6 @@ PostgreSQL(dev):
     APP_VERSION=v1.0.0
     APP_PROFILE=dev
     APP_SECRET=quizapi-dev
-    APP_PROFILE=dev
     DEV_USER=postgres
     DEV_PASSWORD=1234
     DEV_DB=quiz_api
@@ -83,7 +82,7 @@ PostgreSQL(dev):
 H2(test):
 
     APP_VERSION=v1.0.0
-    APP_PROFILE=dev
+    APP_PROFILE=test
     APP_SECRET=quizapi-dev
 
 ## :arrow_forward: Rodando o projeto

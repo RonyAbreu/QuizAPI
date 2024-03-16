@@ -99,7 +99,7 @@ public class ThemeController {
     @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ThemeResponse> updateTheme(@PathVariable Long id,
                                                      @RequestBody @Valid ThemeUpdate themeUpdate,
-                                                     @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
+                                                     @RequestHeader("Authorization") String token) throws UserNotHavePermissionException, ThemeAlreadyExistsException {
         return ResponseEntity.ok(service.updateTheme(id,themeUpdate, token));
     }
 

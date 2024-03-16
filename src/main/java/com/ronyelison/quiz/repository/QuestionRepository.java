@@ -1,6 +1,7 @@
 package com.ronyelison.quiz.repository;
 
 import com.ronyelison.quiz.entity.Question;
+import com.ronyelison.quiz.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,6 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
             "ORDER BY RAND()\n" +
             "LIMIT 10;")
     List<Question> find10QuestionsByThemeId(Long idTheme);
+
+    Page<Question> findByCreator(User user, Pageable pageable);
 }

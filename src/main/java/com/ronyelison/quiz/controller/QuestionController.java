@@ -118,4 +118,18 @@ public class QuestionController {
     public ResponseEntity<List<QuestionResponse>> find10QuestionsByThemeId(@PathVariable Long idTheme){
         return ResponseEntity.ok(service.find10QuestionsByThemeId(idTheme));
     }
+
+    @Operation(tags = "Question", summary = "Find Questions by Creator", responses ={
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = QuestionResponse.class)))),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
+            @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
+    } )
+    @GetMapping(value = "/creator")
+    public ResponseEntity<Page<QuestionResponse>> findQuestionsByCreator(@RequestHeader("Authorization") String token,
+                                                                         @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                         @RequestParam(value = "size", defaultValue = "20") Integer size){
+        Pageable pageable = PageRequest.of(page,size);
+        return ResponseEntity.ok(service.findQuestionsByCreator(token,pageable));
+    }
 }

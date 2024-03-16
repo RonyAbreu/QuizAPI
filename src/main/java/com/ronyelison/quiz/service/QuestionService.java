@@ -96,6 +96,18 @@ public class QuestionService {
         return questionPage.map(Question::entityToResponse);
     }
 
+    public Page<QuestionResponse> findQuestionsByCreator(String token, Pageable pageable){
+        User creator = userService.findUserByToken(token);
+
+        Page<Question> questions = questionRepository.findByCreator(creator, pageable);
+
+        if (questions.isEmpty()){
+            throw new QuestionNotFoundException("Não existe Questões criadas por esse Usuário");
+        }
+
+        return questions.map(Question::entityToResponse);
+    }
+
     public QuestionResponse updateQuestion(Long id, QuestionUpdate questionUpdate, String token) throws UserNotHavePermissionException {
         User user = userService.findUserByToken(token);
 

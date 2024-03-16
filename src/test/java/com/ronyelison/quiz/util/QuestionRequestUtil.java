@@ -17,13 +17,13 @@ public class QuestionRequestUtil {
         basePath = "/api/v1";
     }
 
-    public static QuestionResponse post(QuestionRequest questionRequest, String token){
+    public static QuestionResponse post(QuestionRequest questionRequest, String token, Long idTheme){
         return given()
                 .header("Authorization", "Bearer " + token)
                 .contentType(ContentType.JSON)
                 .body(questionRequest)
                 .when()
-                .post(baseURI+":"+port+basePath+BASE_PATH_QUESTION)
+                .post(baseURI+":"+port+basePath+BASE_PATH_QUESTION+"/"+idTheme)
                 .then()
                 .statusCode(201)
                 .extract()

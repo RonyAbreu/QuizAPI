@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers("/", "/swagger-ui/**", "/v3/api-docs", "/h2/**").permitAll();
-                    request.requestMatchers(HttpMethod.GET,"/api/v1/theme/**", "/api/v1/question/**").permitAll();
+                    request.requestMatchers(HttpMethod.GET,"/api/v1/theme/**", "/api/v1/question/quiz/**").permitAll();
                     request.requestMatchers(HttpMethod.GET, "/api/v1/user", "/api/v1/response", "/api/v1/question").hasRole("ADMIN");
                     request.requestMatchers(HttpMethod.POST,"/api/v1/user/**").permitAll().anyRequest().authenticated();
                 })

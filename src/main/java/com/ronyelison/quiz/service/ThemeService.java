@@ -82,7 +82,7 @@ public class ThemeService {
         return themes.map(Theme::entityToResponse);
     }
 
-    public ThemeResponse updateTheme(Long id, ThemeUpdate themeUpdate, String token) throws UserNotHavePermissionException {
+    public ThemeResponse updateTheme(Long id, ThemeUpdate themeUpdate, String token) throws UserNotHavePermissionException, ThemeAlreadyExistsException {
         User user = userService.findUserByToken(token);
 
         Theme theme = repository.findById(id)
@@ -90,6 +90,12 @@ public class ThemeService {
 
         if (user.userNotHavePermission(theme.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para atualizar esse tema");
+        }
+
+        Theme themeTestName = repository.findByNameIgnoreCase(themeUpdate.name());
+
+        if (themeTestName != null){
+            throw new ThemeAlreadyExistsException("Esse tema já foi cadastrado, tente novamente com outro Nome");
         }
 
         updateData(theme, themeUpdate);

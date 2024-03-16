@@ -202,7 +202,7 @@ class ThemeServiceTest {
     }
 
     @Test
-    void updateTheme() throws UserNotHavePermissionException {
+    void updateTheme() throws UserNotHavePermissionException, ThemeAlreadyExistsException {
         ThemeUpdate themeUpdate = mockTheme.mockThemeUpdate();
         User user = mockUser.mockEntity(1);
         Theme theme = mockTheme.mockEntity(1, user);

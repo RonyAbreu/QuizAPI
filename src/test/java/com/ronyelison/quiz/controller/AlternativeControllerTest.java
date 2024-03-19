@@ -104,7 +104,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
     }
 
     @Test
-    void updateAlternativeByresponse_shouldReturn200Test() {
+    void updateAlternativeByResponse_shouldReturn200Test() {
         UserRequest userRequest = mockUser.mockRequest(1);
         UserResponse userResponse = UserRequestUtil.post(userRequest);
         String token = UserRequestUtil.login(mockUser.mockUserLogin());

@@ -170,32 +170,24 @@ class QuestionControllerTest extends QuizApplicationTests {
     }
 
     @Test
-    void find10QuestionsByThemeId_shouldReturn200Test() throws JsonProcessingException {
+    void find10QuestionsByThemeId_shouldReturn200Test() {
         UserRequest userRequest = mockUser.mockRequest(1);
         UserResponse userResponse = UserRequestUtil.post(userRequest);
         String token = UserRequestUtil.login(mockUser.mockUserLogin());
 
         ThemeResponse themeResponse = ThemeRequestUtil.post(mockTheme.mockRequest(1), token);
-        for (int i = 1; i < 11; i++) {
-            QuestionRequestUtil.post(mockQuestion.mockRequest(i), token, themeResponse.id());
-        }
 
-        Response responses = given()
+        QuestionResponse questionResponse = QuestionRequestUtil.post(mockQuestion.mockRequest(1), token, themeResponse.id());
+
+        given()
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get(baseURI+":"+port+basePath+BASE_PATH_QUESTION+"/quiz/"+themeResponse.id())
                 .then()
                 .statusCode(200)
-                .extract()
-                .response();
+                .assertThat();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValueAsString(responses.body().prettyPrint());
-
-        for (int i = 1; i < 11; i++) {
-            QuestionRequestUtil.delete((long) i, token);
-        }
-
+        QuestionRequestUtil.delete(questionResponse.id(), token);
         ThemeRequestUtil.delete(themeResponse.id(), token);
         UserRequestUtil.delete(userResponse);
     }

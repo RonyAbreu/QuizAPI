@@ -2,7 +2,6 @@ package com.ronyelison.quiz.util;
 
 import com.ronyelison.quiz.dto.alternative.AlternativeRequest;
 import com.ronyelison.quiz.dto.alternative.AlternativeResponse;
-import com.ronyelison.quiz.entity.Alternative;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -17,26 +16,16 @@ public class AlternativeRequestUtil {
         basePath = "/api/v1";
     }
 
-    public static AlternativeResponse post(AlternativeRequest alternativeRequest, String token){
+    public static AlternativeResponse post(AlternativeRequest alternativeRequest, String token, Long questionId){
         return given()
                 .header("Authorization", "Bearer " + token)
                 .contentType(ContentType.JSON)
                 .body(alternativeRequest)
                 .when()
-                .post(baseURI+":"+port+basePath+BASE_PATH_ALTERNATIVE)
+                .post(baseURI+":"+port+basePath+BASE_PATH_ALTERNATIVE+"/"+questionId)
                 .then()
                 .statusCode(201)
                 .extract()
                 .as(AlternativeResponse.class);
-    }
-
-    public static AlternativeResponse [] postAll(AlternativeRequest [] alternativeRequests, String token){
-        AlternativeResponse [] listOfAlternativeResponse = new AlternativeResponse[alternativeRequests.length];
-
-        for (int i = 0; i < alternativeRequests.length; i++) {
-            listOfAlternativeResponse[i] = post(alternativeRequests[i], token);
-        }
-
-        return listOfAlternativeResponse;
     }
 }

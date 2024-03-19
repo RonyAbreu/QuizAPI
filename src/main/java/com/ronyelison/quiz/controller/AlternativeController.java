@@ -63,7 +63,7 @@ public class AlternativeController {
             AlternativeResponse response = insertAlternative(a, idQuestion).getBody();
             responses.add(response);
         }
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responses);
     }
 
     @Operation(tags = "Alternative", summary = "Update Alternative", responses ={

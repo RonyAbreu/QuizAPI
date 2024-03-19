@@ -33,4 +33,13 @@ public class MockAlternative implements MockInterface<Alternative, AlternativeRe
     public AlternativeUpdate mockAlternativeUpdate(){
         return new AlternativeUpdate("Nova Alternativa");
     }
+
+    public AlternativeRequest[] mockAlternativesRequestList() {
+        return new AlternativeRequest[]{
+                new AlternativeRequest("alt 1", false),
+                new AlternativeRequest("alt 2", false),
+                new AlternativeRequest("alt 3", false),
+                new AlternativeRequest("alt 4", true),
+        };
+    }
 }

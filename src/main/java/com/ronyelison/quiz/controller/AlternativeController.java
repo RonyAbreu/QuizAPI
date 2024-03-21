@@ -78,4 +78,17 @@ public class AlternativeController {
                                                                  @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
         return ResponseEntity.ok(service.updateAlternative(id, alternativeUpdate, token));
     }
+
+    @Operation(tags = "Alternative", summary = "Remove Alternative", responses ={
+            @ApiResponse(description = "Success", responseCode = "204", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
+            @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
+    } )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeAlternative(@PathVariable Long id, @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
+        service.removeAlternative(id,token);
+        return ResponseEntity.noContent().build();
+    }
+
 }

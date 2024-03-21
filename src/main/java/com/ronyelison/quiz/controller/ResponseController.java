@@ -63,12 +63,12 @@ public class ResponseController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
-    @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ResponseDTO>> findResponsesByUser(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                                               @RequestParam(value = "size", defaultValue = "20") Integer size,
-                                                              @PathVariable UUID userId){
+                                                              @RequestHeader("Authorization") String token){
         Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findResponsesByUser(pageable, userId));
+        return ResponseEntity.ok(service.findResponsesByUser(pageable, token));
     }
 
     @Operation(tags = "Response", summary = "Find Responses by Question Creator", responses ={
@@ -77,12 +77,12 @@ public class ResponseController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
-    @GetMapping(value = "/creator/{idCreator}")
+    @GetMapping(value = "/questions/creator")
     public ResponseEntity<Page<ResponseDTO>> findResponsesByQuestionCreator(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                                                             @RequestParam(value = "size", defaultValue = "20") Integer size,
-                                                                            @PathVariable UUID idCreator){
+                                                                            @RequestHeader("Authorization") String token){
         Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findResponsesByQuestionCreator(pageable,idCreator));
+        return ResponseEntity.ok(service.findResponsesByQuestionCreator(pageable,token));
     }
 
     @DeleteMapping(value = "/{id}")

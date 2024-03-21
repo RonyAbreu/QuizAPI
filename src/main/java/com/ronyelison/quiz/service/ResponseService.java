@@ -9,10 +9,8 @@ import com.ronyelison.quiz.repository.AlternativeRepository;
 import com.ronyelison.quiz.repository.QuestionRepository;
 import com.ronyelison.quiz.repository.ResponseRepository;
 import com.ronyelison.quiz.repository.UserRepository;
-import com.ronyelison.quiz.service.exception.AlternativeNotFoundException;
-import com.ronyelison.quiz.service.exception.QuestionNotFoundException;
-import com.ronyelison.quiz.service.exception.ResponseNotFoundException;
-import com.ronyelison.quiz.service.exception.UserNotFoundException;
+import com.ronyelison.quiz.security.TokenProvider;
+import com.ronyelison.quiz.service.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +24,17 @@ public class ResponseService {
     private UserRepository userRepository;
     private QuestionRepository questionRepository;
     private AlternativeRepository alternativeRepository;
+    private TokenProvider tokenProvider;
 
     @Autowired
     public ResponseService(ResponseRepository responseRepository, UserRepository userRepository,
-                           QuestionRepository questionRepository, AlternativeRepository alternativeRepository) {
+                           QuestionRepository questionRepository, AlternativeRepository alternativeRepository,
+                           TokenProvider tokenProvider) {
         this.responseRepository = responseRepository;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
         this.alternativeRepository = alternativeRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     public ResponseDTO insertResponse(UUID userId, Long idQuestion, Long idAlternative){
@@ -72,11 +73,10 @@ public class ResponseService {
         return responses.map(Response::entityToResponse);
     }
 
-    public Page<ResponseDTO> findResponsesByUser(Pageable pageable, UUID userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new UserNotFoundException("Usuário não encontrado"));
+    public Page<ResponseDTO> findResponsesByUser(Pageable pageable, String token){
+        User user = findUserByToken(token);
 
-        Page<Response> responses = responseRepository.findByUserUuid(pageable, userId);
+        Page<Response> responses = responseRepository.findByUser(pageable, user);
 
         if (responses.isEmpty()){
             throw new ResponseNotFoundException("Esse usuário ainda não possui nenhuma resposta cadastrada");
@@ -85,16 +85,31 @@ public class ResponseService {
         return responses.map(Response::entityToResponse);
     }
 
-    public Page<ResponseDTO> findResponsesByQuestionCreator(Pageable pageable, UUID creatorId){
-        User user = userRepository.findById(creatorId)
-                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
+    public Page<ResponseDTO> findResponsesByQuestionCreator(Pageable pageable, String token){
+        User user = findUserByToken(token);
 
-        Page<Response> responses = responseRepository.findByQuestionCreatorUuid(pageable, creatorId);
+        Page<Response> responses = responseRepository.findByQuestionCreator(pageable, user);
 
         if (responses.isEmpty()){
             throw new ResponseNotFoundException("Essa questão ainda não possui resposta cadastrada");
         }
 
         return responses.map(Response::entityToResponse);
+    }
+
+    public User findUserByToken(String token) {
+        if (token != null && token.startsWith("Bearer ")){
+            token = token.substring("Bearer ".length());
+        }
+
+        String email = tokenProvider.getSubjectByToken(token);
+
+        User user = (User) userRepository.findByEmail(email);
+
+        if (user == null){
+            throw new InvalidUserException("Usuário inválido, pode ter sido removido do BD e utilizado o token");
+        }
+
+        return user;
     }
 }

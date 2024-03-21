@@ -23,6 +23,8 @@ public class Question {
     private final int MAXIMUM_NUMBER_OF_ALTERNATIVES = 4;
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Alternative> alternatives = new ArrayList<>(MAXIMUM_NUMBER_OF_ALTERNATIVES);
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Response> responses = new ArrayList<>();
 
     public Question(){
 

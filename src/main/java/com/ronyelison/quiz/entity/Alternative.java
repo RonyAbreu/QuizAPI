@@ -4,6 +4,9 @@ import com.ronyelison.quiz.dto.alternative.AlternativeRequest;
 import com.ronyelison.quiz.dto.alternative.AlternativeResponse;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name = "tb_alternative")
 public class Alternative {
     @Id
@@ -13,6 +16,8 @@ public class Alternative {
     private Boolean correct;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Question question;
+    @OneToMany(mappedBy = "alternative", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Response> responses = new ArrayList<>();
 
     public Alternative(){
     }

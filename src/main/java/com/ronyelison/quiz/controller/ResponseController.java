@@ -77,7 +77,7 @@ public class ResponseController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
-    @GetMapping(value = "/questions/creator")
+    @GetMapping(value = "/question/creator")
     public ResponseEntity<Page<ResponseDTO>> findResponsesByQuestionCreator(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                                                             @RequestParam(value = "size", defaultValue = "20") Integer size,
                                                                             @RequestHeader("Authorization") String token){

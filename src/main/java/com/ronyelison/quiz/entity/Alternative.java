@@ -1,6 +1,5 @@
 package com.ronyelison.quiz.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ronyelison.quiz.dto.alternative.AlternativeRequest;
 import com.ronyelison.quiz.dto.alternative.AlternativeResponse;
 import jakarta.persistence.*;
@@ -10,7 +9,7 @@ public class Alternative {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String response;
+    private String text;
     private Boolean correct;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Question question;
@@ -19,28 +18,28 @@ public class Alternative {
     }
 
     public Alternative(AlternativeRequest alternativeRequest, Question question) {
-        this.response = alternativeRequest.response();
+        this.text = alternativeRequest.text();
         this.correct = alternativeRequest.correct();
         this.question = question;
     }
 
-    public Alternative(Long id, String response, Boolean correct, Question question) {
+    public Alternative(Long id, String text, Boolean correct, Question question) {
         this.id = id;
-        this.response = response;
+        this.text = text;
         this.correct = correct;
         this.question = question;
     }
 
     public AlternativeResponse entityToResponse(){
-        return new AlternativeResponse(id, response,correct);
+        return new AlternativeResponse(id, text,correct);
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Boolean getCorrect() {

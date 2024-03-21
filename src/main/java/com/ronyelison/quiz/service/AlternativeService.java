@@ -101,6 +101,6 @@ public class AlternativeService {
     }
 
     private void updateData(Alternative alternative, AlternativeUpdate alternativeUpdate) {
-        alternative.setResponse(alternativeUpdate.response());
+        alternative.setText(alternativeUpdate.text());
     }
 }

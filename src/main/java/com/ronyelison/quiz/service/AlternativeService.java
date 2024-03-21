@@ -63,13 +63,26 @@ public class AlternativeService {
     }
 
     private boolean isFalseAlternativesOnly(Alternative alternative, Question question){
-        int fakeAlternatives = 0;
+        int falseAlternatives = 0;
         for (Alternative a : question.getAlternatives()){
             if (!a.getCorrect() && !alternative.getCorrect()){
-                fakeAlternatives++;
+                falseAlternatives++;
             }
         }
-        return fakeAlternatives == 3;
+        return falseAlternatives == 3;
+    }
+
+    public void removeAlternative(Long id, String token) throws UserNotHavePermissionException {
+        User loggedUser = userService.findUserByToken(token);
+
+        Alternative alternative = alternativeRepository.findById(id)
+                .orElseThrow(() -> new AlternativeNotFoundException("Alternativa não encontrada"));
+
+        if (loggedUser.userNotHavePermission(alternative.getQuestionCreator())){
+            throw new UserNotHavePermissionException("Usuário não tem permissão para remover essa alternativa");
+        }
+
+        alternativeRepository.delete(alternative);
     }
 
     public AlternativeResponse updateAlternative(Long id, AlternativeUpdate alternativeUpdate, String token) throws UserNotHavePermissionException {

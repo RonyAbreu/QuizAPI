@@ -42,4 +42,32 @@ public class MockAlternative implements MockInterface<Alternative, AlternativeRe
                 new AlternativeRequest("alt 4", true),
         };
     }
+
+    public AlternativeRequest[] mockAlternativesFalsesRequestList() {
+        return new AlternativeRequest[]{
+                new AlternativeRequest("alt 1", false),
+                new AlternativeRequest("alt 2", false),
+                new AlternativeRequest("alt 3", false),
+                new AlternativeRequest("alt 4", false),
+        };
+    }
+
+    public AlternativeRequest[] mockAlternativesRequestListMoreThanTheLimit() {
+        return new AlternativeRequest[]{
+                new AlternativeRequest("alt 1", false),
+                new AlternativeRequest("alt 2", false),
+                new AlternativeRequest("alt 3", false),
+                new AlternativeRequest("alt 4", true),
+                new AlternativeRequest("alt 4", false)
+        };
+    }
+
+    public AlternativeRequest[] mockAlternativesTrueDuplicateRequestList() {
+        return new AlternativeRequest[]{
+                new AlternativeRequest("alt 1", false),
+                new AlternativeRequest("alt 2", false),
+                new AlternativeRequest("alt 3", true),
+                new AlternativeRequest("alt 4", true),
+        };
+    }
 }

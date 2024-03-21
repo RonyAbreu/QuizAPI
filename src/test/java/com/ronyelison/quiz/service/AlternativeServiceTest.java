@@ -59,7 +59,7 @@ class AlternativeServiceTest {
         AlternativeResponse result = alternativeService.insertAlternative(alternativeRequest, question.getId());
 
         assertNotNull(result);
-        assertEquals("Alternative", result.response());
+        assertEquals("Alternative", result.text());
     }
 
     @Test
@@ -147,7 +147,7 @@ class AlternativeServiceTest {
         AlternativeResponse result = alternativeService.updateAlternative(alternative.getId(), alternativeUpdate, MockUser.MOCK_TOKEN);
 
         assertNotNull(result);
-        assertEquals("Nova Alternativa", result.response());
+        assertEquals("Nova Alternativa", result.text());
     }
 
     @Test

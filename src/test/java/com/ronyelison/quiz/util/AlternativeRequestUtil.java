@@ -28,4 +28,14 @@ public class AlternativeRequestUtil {
                 .extract()
                 .as(AlternativeResponse.class);
     }
+
+    public static void delete(Long id, String token){
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .delete(baseURI+":"+port+basePath+BASE_PATH_ALTERNATIVE+"/"+id)
+                .then()
+                .statusCode(204)
+                .assertThat();
+    }
 }

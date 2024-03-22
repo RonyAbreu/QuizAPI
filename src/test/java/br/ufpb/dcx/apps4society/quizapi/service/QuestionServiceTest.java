@@ -135,35 +135,6 @@ class QuestionServiceTest {
     }
 
     @Test
-    void findAllQuestions() {
-        Pageable pageable = mock(Pageable.class);
-
-        List<Question> questionList = mockQuestion.mockList(5);
-        Page<Question> questionPage = new PageImpl<>(questionList);
-        Mockito.lenient().when(questionRepository.findAll(pageable)).thenReturn(questionPage);
-
-        List<QuestionResponse> result = questionService.findAllQuestions(pageable).toList();
-
-        assertEquals(5, result.size());
-        assertEquals("Question", result.getFirst().title());
-    }
-
-    @Test
-    void findAllQuestionsNotFound() {
-        Pageable pageable = mock(Pageable.class);
-
-        List<Question> questionList = new ArrayList<>();
-        Page<Question> questionPage = new PageImpl<>(questionList);
-        Mockito.lenient().when(questionRepository.findAll(pageable)).thenReturn(questionPage);
-
-        Exception e = assertThrows(QuestionNotFoundException.class, () ->{
-            questionService.findAllQuestions(pageable);
-        });
-
-        assertEquals(e.getMessage(), Messages.LIST_OF_QUESTIONS_NOT_FOUND);
-    }
-
-    @Test
     void find10QuestionsByThemeId() {
         Theme theme = mockTheme.mockEntity(1);
         List<Question> questionList = mockQuestion.mockList(10);
@@ -188,11 +159,15 @@ class QuestionServiceTest {
     }
 
     @Test
-    void findQuestionById() {
-        Question question = mockQuestion.mockEntity(1);
+    void findQuestionById() throws UserNotHavePermissionException {
+        User user = mockUser.mockEntity(1);
+        Question question = mockQuestion.mockEntity(1,new Theme(), user);
+
+        Mockito.lenient().when(userService.findUserByToken(MockUser.MOCK_TOKEN)).thenReturn(user);
+
         Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
 
-        QuestionResponse result = questionService.findQuestionById(question.getId());
+        QuestionResponse result = questionService.findQuestionById(question.getId(), MockUser.MOCK_TOKEN);
 
         assertNotNull(result);
         assertNotNull(result.imageUrl());
@@ -207,7 +182,7 @@ class QuestionServiceTest {
         Mockito.lenient().when(questionRepository.findById(question.getId())).thenReturn(Optional.of(question));
 
         Exception e = assertThrows(QuestionNotFoundException.class, () ->{
-            questionService.findQuestionById(falseQuestion.getId());
+            questionService.findQuestionById(falseQuestion.getId(), MockUser.MOCK_TOKEN);
         });
 
         assertEquals(e.getMessage(), Messages.QUESTION_NOT_FOUND);

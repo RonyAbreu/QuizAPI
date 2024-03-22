@@ -2,6 +2,7 @@ package br.ufpb.dcx.apps4society.quizapi.controller;
 
 import br.ufpb.dcx.apps4society.quizapi.service.ResponseService;
 import br.ufpb.dcx.apps4society.quizapi.dto.response.ResponseDTO;
+import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotHavePermissionException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -84,9 +85,15 @@ public class ResponseController {
         return ResponseEntity.ok(service.findResponsesByQuestionCreator(pageable,token));
     }
 
+    @Operation(tags = "Response", summary = "Remove Response", responses ={
+            @ApiResponse(description = "Success", responseCode = "204", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
+            @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
+    } )
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> removeResponse(@PathVariable Long id){
-        service.removeResponse(id);
+    public ResponseEntity<Void> removeResponse(@PathVariable Long id, @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
+        service.removeResponse(id, token);
         return ResponseEntity.noContent().build();
     }
 }

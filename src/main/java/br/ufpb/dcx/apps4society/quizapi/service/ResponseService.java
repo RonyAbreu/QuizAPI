@@ -55,9 +55,15 @@ public class ResponseService {
         return response.entityToResponse();
     }
 
-    public void removeResponse(Long idResponse){
+    public void removeResponse(Long idResponse, String token) throws UserNotHavePermissionException {
+        User loggedUser = findUserByToken(token);
+
         Response response = responseRepository.findById(idResponse)
                 .orElseThrow(() -> new ResponseNotFoundException("Resposta não encontrada"));
+
+        if (loggedUser.userNotHavePermission(response.getUser())){
+            throw new UserNotHavePermissionException("Usuário não tem permissão para remover essa resposta");
+        }
 
         responseRepository.delete(response);
     }
@@ -74,9 +80,9 @@ public class ResponseService {
     }
 
     public Page<ResponseDTO> findResponsesByUser(Pageable pageable, String token){
-        User user = findUserByToken(token);
+        User loggedUser = findUserByToken(token);
 
-        Page<Response> responses = responseRepository.findByUser(pageable, user);
+        Page<Response> responses = responseRepository.findByUser(pageable, loggedUser);
 
         if (responses.isEmpty()){
             throw new ResponseNotFoundException("Esse usuário ainda não possui nenhuma resposta cadastrada");
@@ -86,9 +92,9 @@ public class ResponseService {
     }
 
     public Page<ResponseDTO> findResponsesByQuestionCreator(Pageable pageable, String token){
-        User user = findUserByToken(token);
+        User loggedUser = findUserByToken(token);
 
-        Page<Response> responses = responseRepository.findByQuestionCreator(pageable, user);
+        Page<Response> responses = responseRepository.findByQuestionCreator(pageable, loggedUser);
 
         if (responses.isEmpty()){
             throw new ResponseNotFoundException("Essa questão ainda não possui resposta cadastrada");

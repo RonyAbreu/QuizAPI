@@ -129,4 +129,16 @@ public class QuestionService {
         question.setImageUrl(questionUpdate.imageUrl());
     }
 
+    public List<QuestionResponse> find10QuestionsByThemeIdAndCreatorId(Long idTheme, String token){
+        User loggedUser = userService.findUserByToken(token);
+
+        List<Question> questions = questionRepository.find10QuestionsByThemeIdAndCreatorId(idTheme, loggedUser.getUuid());
+
+        if (questions.isEmpty()){
+            throw new QuestionNotFoundException("Não existem questões criadas por esse usuário e com esse tema");
+        }
+
+        return questions.stream().map(Question::entityToResponse).toList();
+    }
+
 }

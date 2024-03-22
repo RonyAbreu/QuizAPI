@@ -17,6 +17,7 @@ import br.ufpb.dcx.apps4society.quizapi.mock.MockTheme;
 import br.ufpb.dcx.apps4society.quizapi.util.*;
 import org.junit.jupiter.api.Test;
 
+import static br.ufpb.dcx.apps4society.quizapi.util.ResponseRequestUtil.BASE_PATH_RESPONSE;
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -42,7 +43,7 @@ class ResponseControllerTest extends QuizApplicationTests {
         ResponseDTO responseDTO = given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .post(baseURI+":"+port+basePath+ ResponseRequestUtil.BASE_PATH_RESPONSE+"/"+userResponse.uuid()+"/"+questionResponse.id()+"/"+alternativeResponse.id())
+                .post(baseURI+":"+port+basePath+ BASE_PATH_RESPONSE+"/"+userResponse.uuid()+"/"+questionResponse.id()+"/"+alternativeResponse.id())
                 .then()
                 .statusCode(201)
                 .extract()
@@ -84,7 +85,7 @@ class ResponseControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get(baseURI + ":" + port + basePath + ResponseRequestUtil.BASE_PATH_RESPONSE + "/user")
+                .get(baseURI + ":" + port + basePath + BASE_PATH_RESPONSE + "/user")
                 .then()
                 .assertThat()
                 .statusCode(200);
@@ -119,7 +120,7 @@ class ResponseControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get(baseURI + ":" + port + basePath + ResponseRequestUtil.BASE_PATH_RESPONSE + "/question/creator")
+                .get(baseURI + ":" + port + basePath + BASE_PATH_RESPONSE + "/question/creator")
                 .then()
                 .assertThat()
                 .statusCode(200);

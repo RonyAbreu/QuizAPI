@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static br.ufpb.dcx.apps4society.quizapi.util.AlternativeRequestUtil.BASE_PATH_ALTERNATIVE;
 import static io.restassured.RestAssured.*;
 import static io.restassured.RestAssured.basePath;
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,7 +53,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeRequest)
                 .when()
-                .post(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/"+questionResponse.id())
+                .post(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/"+questionResponse.id())
                 .then()
                 .statusCode(201)
                 .extract()
@@ -88,7 +89,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativesRequest)
                 .when()
-                .post(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
+                .post(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
                 .then()
                 .statusCode(201)
                 .extract()
@@ -121,7 +122,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeRequest)
                 .when()
-                .post(baseURI + ":" + port + basePath + AlternativeRequestUtil.BASE_PATH_ALTERNATIVE + "/" + questionResponse.id())
+                .post(baseURI + ":" + port + basePath + BASE_PATH_ALTERNATIVE + "/" + questionResponse.id())
                 .then()
                 .statusCode(400)
                 .assertThat();
@@ -150,7 +151,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeRequest)
                 .when()
-                .post(baseURI + ":" + port + basePath + AlternativeRequestUtil.BASE_PATH_ALTERNATIVE + "/" + questionResponse.id())
+                .post(baseURI + ":" + port + basePath + BASE_PATH_ALTERNATIVE + "/" + questionResponse.id())
                 .then()
                 .statusCode(400)
                 .assertThat();
@@ -181,7 +182,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeRequest)
                 .when()
-                .post(baseURI + ":" + port + basePath + AlternativeRequestUtil.BASE_PATH_ALTERNATIVE + "/" + questionResponse.id())
+                .post(baseURI + ":" + port + basePath + BASE_PATH_ALTERNATIVE + "/" + questionResponse.id())
                 .then()
                 .statusCode(404)
                 .assertThat();
@@ -210,7 +211,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativesFalsesRequest)
                 .when()
-                .post(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
+                .post(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
                 .then()
                 .statusCode(400)
                 .assertThat();
@@ -239,7 +240,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativesTrueDuplicateRequest)
                 .when()
-                .post(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
+                .post(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
                 .then()
                 .statusCode(400)
                 .assertThat();
@@ -268,7 +269,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativesMoreThanTheLimit)
                 .when()
-                .post(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
+                .post(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
                 .then()
                 .statusCode(400)
                 .assertThat();
@@ -297,7 +298,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeRequests)
                 .when()
-                .post(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
+                .post(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/all/"+questionResponse.id())
                 .then()
                 .statusCode(403)
                 .assertThat();
@@ -329,7 +330,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeUpdate)
                 .when()
-                .patch(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/"+alternativeResponse.id())
+                .patch(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/"+alternativeResponse.id())
                 .then()
                 .statusCode(200)
                 .extract()
@@ -368,7 +369,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeUpdate)
                 .when()
-                .patch(baseURI + ":" + port + basePath + AlternativeRequestUtil.BASE_PATH_ALTERNATIVE + "/" + null)
+                .patch(baseURI + ":" + port + basePath + BASE_PATH_ALTERNATIVE + "/" + null)
                 .then()
                 .assertThat()
                 .statusCode(403);
@@ -402,7 +403,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeUpdate)
                 .when()
-                .patch(baseURI + ":" + port + basePath + AlternativeRequestUtil.BASE_PATH_ALTERNATIVE + "/" + alternativeResponse.id())
+                .patch(baseURI + ":" + port + basePath + BASE_PATH_ALTERNATIVE + "/" + alternativeResponse.id())
                 .then()
                 .assertThat()
                 .statusCode(404);
@@ -434,7 +435,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeUpdate)
                 .when()
-                .patch(baseURI + ":" + port + basePath + AlternativeRequestUtil.BASE_PATH_ALTERNATIVE + "/" + alternativeResponse.id())
+                .patch(baseURI + ":" + port + basePath + BASE_PATH_ALTERNATIVE + "/" + alternativeResponse.id())
                 .then()
                 .assertThat()
                 .statusCode(403);
@@ -466,7 +467,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeUpdate)
                 .when()
-                .patch(baseURI + ":" + port + basePath + AlternativeRequestUtil.BASE_PATH_ALTERNATIVE + "/" + alternativeResponse.id())
+                .patch(baseURI + ":" + port + basePath + BASE_PATH_ALTERNATIVE + "/" + alternativeResponse.id())
                 .then()
                 .assertThat()
                 .statusCode(400);
@@ -503,7 +504,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(alternativeUpdate)
                 .when()
-                .patch(baseURI + ":" + port + basePath + AlternativeRequestUtil.BASE_PATH_ALTERNATIVE + "/" + alternativeResponse.id())
+                .patch(baseURI + ":" + port + basePath + BASE_PATH_ALTERNATIVE + "/" + alternativeResponse.id())
                 .then()
                 .assertThat()
                 .statusCode(403);
@@ -532,7 +533,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/"+alternativeResponse.id())
+                .delete(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/"+alternativeResponse.id())
                 .then()
                 .statusCode(204)
                 .assertThat();
@@ -560,7 +561,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/"+ null)
+                .delete(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/"+ null)
                 .then()
                 .statusCode(403)
                 .assertThat();
@@ -589,7 +590,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/"+ alternativeResponse.id())
+                .delete(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/"+ alternativeResponse.id())
                 .then()
                 .statusCode(404)
                 .assertThat();
@@ -617,7 +618,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + INVALID_TOKEN)
                 .when()
-                .delete(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/"+ alternativeResponse.id())
+                .delete(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/"+ alternativeResponse.id())
                 .then()
                 .statusCode(403)
                 .assertThat();
@@ -650,7 +651,7 @@ class AlternativeControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + falseToken)
                 .when()
-                .delete(baseURI+":"+port+basePath+ AlternativeRequestUtil.BASE_PATH_ALTERNATIVE+"/"+ alternativeResponse.id())
+                .delete(baseURI+":"+port+basePath+ BASE_PATH_ALTERNATIVE+"/"+ alternativeResponse.id())
                 .then()
                 .statusCode(403)
                 .assertThat();

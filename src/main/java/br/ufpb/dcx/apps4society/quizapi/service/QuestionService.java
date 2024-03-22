@@ -59,16 +59,6 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
-    public Page<QuestionResponse> findAllQuestions(Pageable pageable){
-        Page<Question> questionPage = questionRepository.findAll(pageable);
-
-        if (questionPage.isEmpty()){
-            throw new QuestionNotFoundException("Nenhuma questão foi cadastrada");
-        }
-
-        return questionPage.map(Question::entityToResponse);
-    }
-
     public List<QuestionResponse> find10QuestionsByThemeId(Long id){
         List<Question> questions = questionRepository.find10QuestionsByThemeId(id);
 
@@ -79,11 +69,17 @@ public class QuestionService {
         return questions.stream().map(Question::entityToResponse).toList();
     }
 
-    public QuestionResponse findQuestionById(Long id){
-        return questionRepository
-                .findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"))
-                .entityToResponse();
+    public QuestionResponse findQuestionById(Long id, String token) throws UserNotHavePermissionException {
+        User loggedUser = userService.findUserByToken(token);
+
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"));
+
+        if (loggedUser.userNotHavePermission(question.getCreator())){
+            throw new UserNotHavePermissionException("Usuário não tem permissão para buscar essa questão");
+        }
+
+        return question.entityToResponse();
     }
 
     public Page<QuestionResponse> findQuestionByThemeId(Long id, Pageable pageable){

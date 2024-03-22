@@ -2,6 +2,7 @@ package br.ufpb.dcx.apps4society.quizapi.service;
 
 import br.ufpb.dcx.apps4society.quizapi.dto.user.UserRequest;
 import br.ufpb.dcx.apps4society.quizapi.dto.user.UserResponse;
+import br.ufpb.dcx.apps4society.quizapi.util.Messages;
 import com.auth0.jwt.algorithms.Algorithm;
 import br.ufpb.dcx.apps4society.quizapi.dto.user.UserUpdate;
 import br.ufpb.dcx.apps4society.quizapi.entity.User;
@@ -12,7 +13,6 @@ import br.ufpb.dcx.apps4society.quizapi.service.exception.InvalidUserException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserAlreadyExistsException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotFoundException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotHavePermissionException;
-import br.ufpb.dcx.apps4society.quizapi.util.Messages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,14 +1,14 @@
 package br.ufpb.dcx.apps4society.quizapi.service;
 
+import br.ufpb.dcx.apps4society.quizapi.dto.response.ResponseDTO;
 import br.ufpb.dcx.apps4society.quizapi.entity.*;
 import br.ufpb.dcx.apps4society.quizapi.mock.*;
-import br.ufpb.dcx.apps4society.quizapi.dto.response.ResponseDTO;
-import br.ufpb.dcx.apps4society.quizapi.service.exception.*;
 import br.ufpb.dcx.apps4society.quizapi.repository.AlternativeRepository;
 import br.ufpb.dcx.apps4society.quizapi.repository.QuestionRepository;
 import br.ufpb.dcx.apps4society.quizapi.repository.ResponseRepository;
 import br.ufpb.dcx.apps4society.quizapi.repository.UserRepository;
 import br.ufpb.dcx.apps4society.quizapi.security.TokenProvider;
+import br.ufpb.dcx.apps4society.quizapi.service.exception.*;
 import br.ufpb.dcx.apps4society.quizapi.util.Messages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

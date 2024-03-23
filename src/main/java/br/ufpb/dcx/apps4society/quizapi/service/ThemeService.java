@@ -9,6 +9,7 @@ import br.ufpb.dcx.apps4society.quizapi.repository.ThemeRepository;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.ThemeAlreadyExistsException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.ThemeNotFoundException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotHavePermissionException;
+import br.ufpb.dcx.apps4society.quizapi.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -46,7 +47,7 @@ public class ThemeService {
         User user = userService.findUserByToken(token);
 
         Theme theme = repository.findById(id)
-                .orElseThrow(() -> new ThemeNotFoundException("Tema não encontrado"));
+                .orElseThrow(() -> new ThemeNotFoundException(Messages.THEME_NOT_FOUND));
 
         if (theme.containsQuestionsInTheList()){
             throw new DataIntegrityViolationException("Não é permitido remover um Tema que contém questões ligadas a ele");
@@ -68,7 +69,7 @@ public class ThemeService {
 
     public ThemeResponse findThemeById(Long id){
         return repository.findById(id)
-                .orElseThrow(() -> new ThemeNotFoundException("Tema não encontrado"))
+                .orElseThrow(() -> new ThemeNotFoundException(Messages.THEME_NOT_FOUND))
                 .entityToResponse();
     }
 
@@ -86,7 +87,7 @@ public class ThemeService {
         User user = userService.findUserByToken(token);
 
         Theme theme = repository.findById(id)
-                .orElseThrow(() -> new ThemeNotFoundException("Tema não encontrado"));
+                .orElseThrow(() -> new ThemeNotFoundException(Messages.THEME_NOT_FOUND));
 
         if (user.userNotHavePermission(theme.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para atualizar esse tema");

@@ -80,9 +80,6 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
     public void setPassword(String password) {
         this.password = password;
     }
@@ -141,5 +138,9 @@ public class User implements UserDetails {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

@@ -11,6 +11,7 @@ import br.ufpb.dcx.apps4society.quizapi.repository.ThemeRepository;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.QuestionNotFoundException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.ThemeNotFoundException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotHavePermissionException;
+import br.ufpb.dcx.apps4society.quizapi.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +50,7 @@ public class QuestionService {
     public void removeQuestion(Long id, String token) throws UserNotHavePermissionException {
         User user = userService.findUserByToken(token);
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"));
+                .orElseThrow(() -> new QuestionNotFoundException(Messages.QUESTION_NOT_FOUND));
 
         if (user.userNotHavePermission(question.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para remover essa questão");
@@ -57,16 +58,6 @@ public class QuestionService {
 
         question.removeQuestionOfThemeList(id);
         questionRepository.delete(question);
-    }
-
-    public Page<QuestionResponse> findAllQuestions(Pageable pageable){
-        Page<Question> questionPage = questionRepository.findAll(pageable);
-
-        if (questionPage.isEmpty()){
-            throw new QuestionNotFoundException("Nenhuma questão foi cadastrada");
-        }
-
-        return questionPage.map(Question::entityToResponse);
     }
 
     public List<QuestionResponse> find10QuestionsByThemeId(Long id){
@@ -79,11 +70,17 @@ public class QuestionService {
         return questions.stream().map(Question::entityToResponse).toList();
     }
 
-    public QuestionResponse findQuestionById(Long id){
-        return questionRepository
-                .findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"))
-                .entityToResponse();
+    public QuestionResponse findQuestionById(Long id, String token) throws UserNotHavePermissionException {
+        User loggedUser = userService.findUserByToken(token);
+
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new QuestionNotFoundException(Messages.QUESTION_NOT_FOUND));
+
+        if (loggedUser.userNotHavePermission(question.getCreator())){
+            throw new UserNotHavePermissionException("Usuário não tem permissão para buscar essa questão");
+        }
+
+        return question.entityToResponse();
     }
 
     public Page<QuestionResponse> findQuestionByThemeId(Long id, Pageable pageable){
@@ -112,7 +109,7 @@ public class QuestionService {
         User user = userService.findUserByToken(token);
 
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"));
+                .orElseThrow(() -> new QuestionNotFoundException(Messages.QUESTION_NOT_FOUND));
 
         if (user.userNotHavePermission(question.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para atualizar essa questão");

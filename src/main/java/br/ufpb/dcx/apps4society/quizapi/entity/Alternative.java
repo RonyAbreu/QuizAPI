@@ -4,11 +4,12 @@ import br.ufpb.dcx.apps4society.quizapi.dto.alternative.AlternativeRequest;
 import br.ufpb.dcx.apps4society.quizapi.dto.alternative.AlternativeResponse;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "tb_alternative")
-public class Alternative {
+public class Alternative implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

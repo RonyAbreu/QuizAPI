@@ -3,9 +3,10 @@ package br.ufpb.dcx.apps4society.quizapi.entity;
 import br.ufpb.dcx.apps4society.quizapi.dto.response.ResponseDTO;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 @Entity(name = "tb_response")
-public class Response {
+public class Response implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

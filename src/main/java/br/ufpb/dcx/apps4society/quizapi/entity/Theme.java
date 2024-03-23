@@ -3,11 +3,12 @@ package br.ufpb.dcx.apps4society.quizapi.entity;
 import br.ufpb.dcx.apps4society.quizapi.dto.theme.ThemeResponse;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "tb_theme")
-public class Theme {
+public class Theme implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

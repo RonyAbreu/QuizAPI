@@ -59,18 +59,6 @@ public class QuestionController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(tags = "Question", summary = "Find All Questions", responses ={
-            @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = QuestionResponse.class)))),
-            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
-            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content())
-    })
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<QuestionResponse>> findAllQuestions(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                   @RequestParam(value = "size", defaultValue = "20") Integer size){
-        Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findAllQuestions(pageable));
-    }
-
     @Operation(tags = "Question", summary = "Find Question", responses ={
             @ApiResponse(description = "Success", responseCode = "200", content = @Content(schema = @Schema(implementation = QuestionResponse.class))),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
@@ -78,8 +66,8 @@ public class QuestionController {
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<QuestionResponse> findQuestionById(@PathVariable Long id){
-        return ResponseEntity.ok(service.findQuestionById(id));
+    public ResponseEntity<QuestionResponse> findQuestionById(@PathVariable Long id, @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
+        return ResponseEntity.ok(service.findQuestionById(id,token));
     }
 
     @Operation(tags = "Question", summary = "Find Questions by Theme", responses ={

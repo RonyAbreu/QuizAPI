@@ -260,23 +260,23 @@ class UserControllerTest extends QuizApplicationTests {
     @Test
     void removeUserNotHavePermission_shouldReturn403Test() {
         UserRequest userRequest = mockUser.mockRequest(1);
-        UserRequest falseUser = new UserRequest("falseUser", "false@gmail.com", "12345678");
+        UserRequest anotherUser = new UserRequest("anotherUser", "another@gmail.com", "12345678");
 
         UserResponse userResponse = UserRequestUtil.post(userRequest);
-        UserResponse falseUserResponse = UserRequestUtil.post(falseUser);
+        UserResponse anotherUserResponse = UserRequestUtil.post(anotherUser);
 
-        UserLogin falseUserLogin = new UserLogin(falseUser.email(), falseUser.password());
-        String falseUserToken = UserRequestUtil.login(falseUserLogin);
+        UserLogin anotherUserLogin = new UserLogin(anotherUser.email(), anotherUser.password());
+        String anotherUserToken = UserRequestUtil.login(anotherUserLogin);
 
         given()
-                .header("Authorization", "Bearer " + falseUserToken)
+                .header("Authorization", "Bearer " + anotherUserToken)
                 .delete(baseURI + ":" + port + basePath + BASE_PATH_USER + userResponse.uuid())
                 .then()
                 .assertThat()
                 .statusCode(403);
 
         UserRequestUtil.delete(userResponse);
-        UserRequestUtil.delete(falseUserResponse.uuid(), falseUserToken);
+        UserRequestUtil.delete(anotherUserResponse.uuid(), anotherUserToken);
     }
 
     @Test
@@ -314,18 +314,18 @@ class UserControllerTest extends QuizApplicationTests {
     @Test
     void updateUserNotHavePermission_shouldReturn403Test() {
         UserRequest userRequest = mockUser.mockRequest(1);
-        UserRequest falseUser = new UserRequest("falseUser", "false@gmail.com", "12345678");
+        UserRequest anotherUser = new UserRequest("anotherUser", "another@gmail.com", "12345678");
 
         UserResponse userResponse = UserRequestUtil.post(userRequest);
-        UserResponse falseUserResponse = UserRequestUtil.post(falseUser);
+        UserResponse anotherUserResponse = UserRequestUtil.post(anotherUser);
 
-        UserLogin falseUserLogin = new UserLogin(falseUser.email(), falseUser.password());
-        String falseUserToken = UserRequestUtil.login(falseUserLogin);
+        UserLogin anotherUserLogin = new UserLogin(anotherUser.email(), anotherUser.password());
+        String anotherUserToken = UserRequestUtil.login(anotherUserLogin);
 
         UserUpdate userUpdate = mockUser.mockUserUpdate();
 
         given()
-                .header("Authorization", "Bearer "+falseUserToken)
+                .header("Authorization", "Bearer "+anotherUserToken)
                 .contentType(ContentType.JSON)
                 .body(userUpdate)
                 .when()
@@ -335,7 +335,7 @@ class UserControllerTest extends QuizApplicationTests {
 
 
         UserRequestUtil.delete(userResponse);
-        UserRequestUtil.delete(falseUserResponse.uuid(), falseUserToken);
+        UserRequestUtil.delete(anotherUserResponse.uuid(), anotherUserToken);
     }
 
     @Test

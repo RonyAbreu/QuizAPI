@@ -216,16 +216,16 @@ class ThemeControllerTest extends QuizApplicationTests {
         UserResponse userResponse = UserRequestUtil.post(mockUser.mockRequest(1));
         String token = UserRequestUtil.login(mockUser.mockUserLogin());
 
-        UserRequest falseUserRequest = new UserRequest("false", "false@gmail.com", "12345678");
-        UserResponse falseUser = UserRequestUtil.post(falseUserRequest);
-        UserLogin falseUserLogin = new UserLogin(falseUserRequest.email(), falseUserRequest.password());
-        String falseToken = UserRequestUtil.login(falseUserLogin);
+        UserRequest anotherUserRequest = new UserRequest("another", "another@gmail.com", "12345678");
+        UserResponse anotherUser = UserRequestUtil.post(anotherUserRequest);
+        UserLogin anotherUserLogin = new UserLogin(anotherUserRequest.email(), anotherUserRequest.password());
+        String anotherToken = UserRequestUtil.login(anotherUserLogin);
 
         ThemeRequest themeRequest = mockTheme.mockRequest(1);
         ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
 
         given()
-                .header("Authorization", "Bearer " + falseToken)
+                .header("Authorization", "Bearer " + anotherToken)
                 .when()
                 .delete(baseURI+":"+port+basePath+BASE_PATH_THEME+"/"+themeResponse.id())
                 .then()
@@ -233,7 +233,7 @@ class ThemeControllerTest extends QuizApplicationTests {
 
         ThemeRequestUtil.delete(themeResponse.id(), token);
         UserRequestUtil.delete(userResponse);
-        UserRequestUtil.delete(falseUser.uuid(), falseToken);
+        UserRequestUtil.delete(anotherUser.uuid(), anotherToken);
     }
 
     @Test
@@ -510,17 +510,17 @@ class ThemeControllerTest extends QuizApplicationTests {
         UserResponse userResponse = UserRequestUtil.post(userRequest);
         String token = UserRequestUtil.login(mockUser.mockUserLogin());
 
-        UserRequest falseUserRequest = new UserRequest("false", "false@gmail.com", "12345678");
-        UserResponse falseUser = UserRequestUtil.post(falseUserRequest);
-        UserLogin falseUserLogin = new UserLogin(falseUserRequest.email(), falseUserRequest.password());
-        String falseToken = UserRequestUtil.login(falseUserLogin);
+        UserRequest anotherUserRequest = new UserRequest("another", "another@gmail.com", "12345678");
+        UserResponse anotherUser = UserRequestUtil.post(anotherUserRequest);
+        UserLogin anotherUserLogin = new UserLogin(anotherUserRequest.email(), anotherUserRequest.password());
+        String anotherToken = UserRequestUtil.login(anotherUserLogin);
 
         ThemeRequest themeRequest = mockTheme.mockRequest(1);
         ThemeResponse postTheme = ThemeRequestUtil.post(themeRequest, token);
         ThemeUpdate themeUpdate = mockTheme.mockThemeUpdate();
 
         given()
-                .header("Authorization", "Bearer " + falseToken)
+                .header("Authorization", "Bearer " + anotherToken)
                 .contentType(ContentType.JSON)
                 .body(themeUpdate)
                 .when()
@@ -531,6 +531,6 @@ class ThemeControllerTest extends QuizApplicationTests {
 
         ThemeRequestUtil.delete(postTheme.id(), token);
         UserRequestUtil.delete(userResponse);
-        UserRequestUtil.delete(falseUser.uuid(), falseToken);
+        UserRequestUtil.delete(anotherUser.uuid(), anotherToken);
     }
 }

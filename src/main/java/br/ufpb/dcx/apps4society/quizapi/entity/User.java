@@ -139,4 +139,8 @@ public class User implements UserDetails {
     public UUID getUuid() {
         return uuid;
     }
+
+    public String getEmail() {
+        return email;
+    }
 }

@@ -17,6 +17,8 @@ import br.ufpb.dcx.apps4society.quizapi.mock.MockTheme;
 import br.ufpb.dcx.apps4society.quizapi.util.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static br.ufpb.dcx.apps4society.quizapi.util.ResponseRequestUtil.BASE_PATH_RESPONSE;
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -62,7 +64,226 @@ class ResponseControllerTest extends QuizApplicationTests {
     }
 
     @Test
-    void findAllResponses() {
+    void insertResponseByUserNotFound_shouldReturn404Test() {
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeResponse alternativeResponse = AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        UUID userIdNotFound = UUID.randomUUID();
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .post(baseURI + ":" + port + basePath + BASE_PATH_RESPONSE + "/" + userIdNotFound + "/" + questionResponse.id() + "/" + alternativeResponse.id())
+                .then()
+                .assertThat()
+                .statusCode(404);
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+    }
+
+    @Test
+    void insertResponseByQuestionNotFound_shouldReturn404Test() {
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeResponse alternativeResponse = AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        long questionIdNotFound = 107676;
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .post(baseURI + ":" + port + basePath + BASE_PATH_RESPONSE + "/" + userResponse.uuid() + "/" + questionIdNotFound + "/" + alternativeResponse.id())
+                .then()
+                .assertThat()
+                .statusCode(404);
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+    }
+
+    @Test
+    void insertResponseByAlternativeNotFound_shouldReturn404Test() {
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        long alternativeIdNotFound = 107878;
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .post(baseURI + ":" + port + basePath + BASE_PATH_RESPONSE + "/" + userResponse.uuid() + "/" + questionResponse.id() + "/" + alternativeIdNotFound)
+                .then()
+                .assertThat()
+                .statusCode(404);
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+    }
+
+    @Test
+    void removeResponseById_shouldReturn204Test(){
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeResponse alternativeResponse = AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        ResponseDTO responseDTO = ResponseRequestUtil.post(userResponse.uuid(),questionResponse.id(), alternativeResponse.id(), token);
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .delete(baseURI+":"+port+basePath+BASE_PATH_RESPONSE+"/"+responseDTO.id())
+                .then()
+                .statusCode(204)
+                .extract()
+                .response();
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+    }
+
+    @Test
+    void removeResponseNotFound_shouldReturn404Test(){
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeResponse alternativeResponse = AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        ResponseRequestUtil.post(userResponse.uuid(),questionResponse.id(), alternativeResponse.id(), token);
+
+        long responseIdNotFound = 10;
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .delete(baseURI+":"+port+basePath+BASE_PATH_RESPONSE+"/"+responseIdNotFound)
+                .then()
+                .statusCode(404)
+                .extract()
+                .response();
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+    }
+
+    @Test
+    void removeResponseByInvalidToken_shouldReturn403Test(){
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeResponse alternativeResponse = AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        ResponseDTO responseDTO = ResponseRequestUtil.post(userResponse.uuid(),questionResponse.id(), alternativeResponse.id(), token);
+
+        given()
+                .header("Authorization", "Bearer " + INVALID_TOKEN)
+                .when()
+                .delete(baseURI+":"+port+basePath+BASE_PATH_RESPONSE+"/"+responseDTO.id())
+                .then()
+                .statusCode(403)
+                .extract()
+                .response();
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+    }
+
+    @Test
+    void removeResponseByUserNotHavePermission_shouldReturn403Test(){
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        UserRequest anotherUser = new UserRequest("another", "another@gmail.com","another12345");
+        UserResponse anotherUserResponse = UserRequestUtil.post(anotherUser);
+        UserLogin anotherUserLogin = new UserLogin(anotherUser.email(), anotherUser.password());
+        String anotherUserToken = UserRequestUtil.login(anotherUserLogin);
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeResponse alternativeResponse = AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        ResponseDTO responseDTO = ResponseRequestUtil.post(userResponse.uuid(),questionResponse.id(), alternativeResponse.id(), token);
+
+        given()
+                .header("Authorization", "Bearer " + anotherUserToken)
+                .when()
+                .delete(baseURI+":"+port+basePath+BASE_PATH_RESPONSE+"/"+responseDTO.id())
+                .then()
+                .statusCode(403)
+                .extract()
+                .response();
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+        UserRequestUtil.delete(anotherUserResponse.uuid(), anotherUserToken);
     }
 
     @Test
@@ -89,6 +310,64 @@ class ResponseControllerTest extends QuizApplicationTests {
                 .then()
                 .assertThat()
                 .statusCode(200);
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+    }
+
+    @Test
+    void findResponsesByInvalidToken_shouldReturn403Test() {
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeResponse alternativeResponse = AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        ResponseRequestUtil.post(userResponse.uuid(), questionResponse.id(),alternativeResponse.id(),token);
+
+        given()
+                .header("Authorization", "Bearer " + INVALID_TOKEN)
+                .when()
+                .get(baseURI + ":" + port + basePath + BASE_PATH_RESPONSE + "/user")
+                .then()
+                .assertThat()
+                .statusCode(403);
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+    }
+
+    @Test
+    void findResponsesByListIsEmpty_shouldReturn404Test() {
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeResponse alternativeResponse = AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(baseURI + ":" + port + basePath + BASE_PATH_RESPONSE + "/user")
+                .then()
+                .assertThat()
+                .statusCode(404);
 
         QuestionRequestUtil.delete(questionResponse.id(), token);
         ThemeRequestUtil.delete(themeResponse.id(), token);
@@ -124,6 +403,76 @@ class ResponseControllerTest extends QuizApplicationTests {
                 .then()
                 .assertThat()
                 .statusCode(200);
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+        UserRequestUtil.delete(anotherUserResponse.uuid(), anotherUserToken);
+    }
+
+    @Test
+    void findResponsesByQuestionCreatorWithInvalidToken_shouldReturn403Test(){
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        UserRequest anotherUser = new UserRequest("Another", "another@gmail.com","12345678");
+        UserResponse anotherUserResponse = UserRequestUtil.post(anotherUser);
+        UserLogin anotherUserLogin = new UserLogin(anotherUser.email(), anotherUser.password());
+        String anotherUserToken = UserRequestUtil.login(anotherUserLogin);
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeResponse alternativeResponse = AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        ResponseRequestUtil.post(anotherUserResponse.uuid(), questionResponse.id(),alternativeResponse.id(), anotherUserToken);
+
+        given()
+                .header("Authorization", "Bearer " + INVALID_TOKEN)
+                .when()
+                .get(baseURI + ":" + port + basePath + BASE_PATH_RESPONSE + "/question/creator")
+                .then()
+                .assertThat()
+                .statusCode(403);
+
+        QuestionRequestUtil.delete(questionResponse.id(), token);
+        ThemeRequestUtil.delete(themeResponse.id(), token);
+        UserRequestUtil.delete(userResponse);
+        UserRequestUtil.delete(anotherUserResponse.uuid(), anotherUserToken);
+    }
+
+    @Test
+    void findResponsesQuestionCreatorByListIsEmpty_shouldReturn404Test(){
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        UserRequest anotherUser = new UserRequest("Another", "another@gmail.com","12345678");
+        UserResponse anotherUserResponse = UserRequestUtil.post(anotherUser);
+        UserLogin anotherUserLogin = new UserLogin(anotherUser.email(), anotherUser.password());
+        String anotherUserToken = UserRequestUtil.login(anotherUserLogin);
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest, token, themeResponse.id());
+
+        AlternativeRequest alternativeRequest = mockAlternative.mockRequest(1);
+        AlternativeRequestUtil.post(alternativeRequest, token, questionResponse.id());
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(baseURI + ":" + port + basePath + BASE_PATH_RESPONSE + "/question/creator")
+                .then()
+                .assertThat()
+                .statusCode(404);
 
         QuestionRequestUtil.delete(questionResponse.id(), token);
         ThemeRequestUtil.delete(themeResponse.id(), token);

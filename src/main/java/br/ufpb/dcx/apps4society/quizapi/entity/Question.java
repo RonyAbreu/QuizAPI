@@ -5,11 +5,12 @@ import br.ufpb.dcx.apps4society.quizapi.dto.question.QuestionRequest;
 import br.ufpb.dcx.apps4society.quizapi.dto.question.QuestionResponse;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "tb_question")
-public class Question {
+public class Question implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

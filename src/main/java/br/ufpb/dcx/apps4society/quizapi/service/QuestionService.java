@@ -11,6 +11,7 @@ import br.ufpb.dcx.apps4society.quizapi.repository.ThemeRepository;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.QuestionNotFoundException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.ThemeNotFoundException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotHavePermissionException;
+import br.ufpb.dcx.apps4society.quizapi.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +50,7 @@ public class QuestionService {
     public void removeQuestion(Long id, String token) throws UserNotHavePermissionException {
         User user = userService.findUserByToken(token);
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"));
+                .orElseThrow(() -> new QuestionNotFoundException(Messages.QUESTION_NOT_FOUND));
 
         if (user.userNotHavePermission(question.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para remover essa questão");
@@ -73,7 +74,7 @@ public class QuestionService {
         User loggedUser = userService.findUserByToken(token);
 
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"));
+                .orElseThrow(() -> new QuestionNotFoundException(Messages.QUESTION_NOT_FOUND));
 
         if (loggedUser.userNotHavePermission(question.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para buscar essa questão");
@@ -108,7 +109,7 @@ public class QuestionService {
         User user = userService.findUserByToken(token);
 
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("A questão não foi encontrada"));
+                .orElseThrow(() -> new QuestionNotFoundException(Messages.QUESTION_NOT_FOUND));
 
         if (user.userNotHavePermission(question.getCreator())){
             throw new UserNotHavePermissionException("Usuário não tem permissão para atualizar essa questão");

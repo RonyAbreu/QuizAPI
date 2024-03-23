@@ -8,6 +8,7 @@ import br.ufpb.dcx.apps4society.quizapi.service.exception.InvalidUserException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserAlreadyExistsException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotFoundException;
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotHavePermissionException;
+import br.ufpb.dcx.apps4society.quizapi.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -59,7 +60,7 @@ public class UserService {
         User loggedUser = findUserByToken(token);
 
         User returnUser = userRepository.findById(userUuid)
-                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
+                .orElseThrow(() -> new UserNotFoundException(Messages.USER_NOT_FOUND));
 
         if (loggedUser.userNotHavePermission(returnUser)){
             throw new UserNotHavePermissionException("Você não tem permissão para buscar esse usuário");
@@ -72,7 +73,7 @@ public class UserService {
         User loggedUser = findUserByToken(token);
 
         User removeUser = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
+                .orElseThrow(() -> new UserNotFoundException(Messages.USER_NOT_FOUND));
 
         if (loggedUser.userNotHavePermission(removeUser)){
             throw new UserNotHavePermissionException("Você não tem permissão para remover esse usuário");
@@ -85,7 +86,7 @@ public class UserService {
         User loggedUser = findUserByToken(token);
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
+                .orElseThrow(() -> new UserNotFoundException(Messages.USER_NOT_FOUND));
 
         if (loggedUser.userNotHavePermission(user)){
             throw new UserNotHavePermissionException("Você não tem permissão para atualizar esse usuário");

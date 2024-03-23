@@ -89,7 +89,7 @@ class ResponseServiceTest {
             responseService.insertResponse(falseUser.getUuid(), question.getId(), alternative.getId());
         });
 
-        assertEquals(e.getMessage(), Messages.USER_NOT_FOUND_MESSAGE);
+        assertEquals(e.getMessage(), Messages.USER_NOT_FOUND);
     }
 
     @Test
@@ -193,7 +193,7 @@ class ResponseServiceTest {
             responseService.findResponsesByUser(pageable, "invalidToken");
         });
 
-        assertEquals(e.getMessage(), Messages.INVALID_USER_MESSAGE);
+        assertEquals(e.getMessage(), Messages.INVALID_USER);
     }
 
     @Test

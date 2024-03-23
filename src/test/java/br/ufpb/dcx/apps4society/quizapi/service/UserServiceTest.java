@@ -76,7 +76,7 @@ public class UserServiceTest {
             userService.registerUser(userRequest);
         });
 
-        assertEquals(e.getMessage(), Messages.USER_ALREADY_EXISTS_MESSAGE);
+        assertEquals(e.getMessage(), Messages.USER_ALREADY_EXISTS);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class UserServiceTest {
             userService.removeUser(userFalse.getUuid(),MockUser.MOCK_TOKEN);
         });
 
-        assertEquals(e.getMessage(), Messages.USER_NOT_FOUND_MESSAGE);
+        assertEquals(e.getMessage(), Messages.USER_NOT_FOUND);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class UserServiceTest {
             userService.updateUser(userFalse.getUuid(), userUpdate, MockUser.MOCK_TOKEN);
         });
 
-        assertEquals(e.getMessage(), Messages.USER_NOT_FOUND_MESSAGE);
+        assertEquals(e.getMessage(), Messages.USER_NOT_FOUND);
 
     }
 
@@ -229,6 +229,6 @@ public class UserServiceTest {
             userService.findUserByToken(MockUser.MOCK_TOKEN);
         });
 
-        assertEquals(e.getMessage(), Messages.INVALID_USER_MESSAGE);
+        assertEquals(e.getMessage(), Messages.INVALID_USER);
     }
 }

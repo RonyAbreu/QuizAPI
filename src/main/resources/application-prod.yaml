@@ -6,4 +6,4 @@ spring:
     password: ${PROD_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update

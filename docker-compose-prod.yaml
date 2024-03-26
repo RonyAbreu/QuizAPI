@@ -7,24 +7,22 @@ services:
     image: postgres:16
     restart: always
     env_file:
-      - dev.env
+      - prod.env
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/app/data
+      - db_data:/var/lib/postgresql/data
     networks:
       - quiz-network
 
   quiz-api:
     container_name: container-quiz-api
+    image: a4sufpb/quizapi:latest
     depends_on:
       - db
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
     env_file:
-      - dev.env
+      - prod.env
     ports:
       - "8080:8080"
     networks:

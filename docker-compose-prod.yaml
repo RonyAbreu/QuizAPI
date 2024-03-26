@@ -9,7 +9,7 @@ services:
     env_file:
       - prod.env
     ports:
-      - "5432:5432"
+      - "5555:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
@@ -24,7 +24,7 @@ services:
     env_file:
       - prod.env
     ports:
-      - "8080:8080"
+      - "8085:8080"
     networks:
       - quiz-network
 

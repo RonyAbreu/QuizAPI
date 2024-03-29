@@ -22,10 +22,17 @@ public class QuizApplication {
 	}
 
 	private String welcomeHtml(){
-		return "<div style=\"display: flex; justify-content: center;\">\n" +
+		return "<div\n" +
+				"      style=\"\n" +
+				"        display: flex;\n" +
+				"        justify-content: center;\n" +
+				"        align-items: center;\n" +
+				"        flex-direction: column;\n" +
+				"      \"\n" +
+				"    >\n" +
 				"      <h1\n" +
 				"        style=\"\n" +
-				"          box-shadow: 0px 0px 8px black;\n" +
+				"          box-shadow: 0px 0px 5px black;\n" +
 				"          border-radius: 15px;\n" +
 				"          width: 500px;\n" +
 				"          height: 80px;\n" +
@@ -36,6 +43,20 @@ public class QuizApplication {
 				"      >\n" +
 				"        Bem-vindo ao QuizAPI <span style=\"color: green; margin-left: 10px;\">"+version+"</span>\n" +
 				"      </h1>\n" +
+				"      <a href=\"http://api.observatorioturismopb.com.br:8085/swagger-ui/index.html#/\" target=\"_blank\"\n" +
+				"        style=\"\n" +
+				"          padding: 15px 20px;\n" +
+				"          font-weight: bold;\n" +
+				"          font-size: 20px;\n" +
+				"          border-radius: 15px;\n" +
+				"          cursor: pointer;\n" +
+				"          background-color: rgb(0, 134, 36);\n" +
+				"          color: #fff;\n" +
+				"          text-decoration: none;\n" +
+				"        \"\n" +
+				"      >\n" +
+				"        Documentação\n" +
+				"      </a>\n" +
 				"    </div>";
 	}
 

@@ -151,7 +151,7 @@ class ThemeServiceTest {
     void findAllThemes() {
         Pageable pageable = mock(Pageable.class);
 
-        List<Theme> themeList = Collections.singletonList(new Theme("TestTheme", new User("userId", "userName", "userToken")));
+        List<Theme> themeList = Collections.singletonList(new Theme("TestTheme", "image.com",new User("userId", "userName", "userToken")));
         Page<Theme> themePage = new PageImpl<>(themeList);
         Mockito.lenient().when(repository.findAll(pageable)).thenReturn(themePage);
 

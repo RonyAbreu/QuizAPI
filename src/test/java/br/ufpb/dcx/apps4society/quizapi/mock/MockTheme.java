@@ -23,10 +23,10 @@ public class MockTheme implements MockInterface<Theme, ThemeRequest>{
 
     @Override
     public ThemeRequest mockRequest(Integer num) {
-        return new ThemeRequest("Tema");
+        return new ThemeRequest("Tema", "http://imagem.com");
     }
 
     public ThemeUpdate mockThemeUpdate(){
-        return new ThemeUpdate("Novo tema");
+        return new ThemeUpdate("Novo tema","http://imagem.com");
     }
 }

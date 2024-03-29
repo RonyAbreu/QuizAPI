@@ -36,7 +36,7 @@ public class ThemeService {
 
         User user = userService.findUserByToken(token);
 
-        Theme saveTheme = new Theme(themeRequest.name(), user);
+        Theme saveTheme = new Theme(themeRequest.name(),themeRequest.imageUrl(), user);
         user.addTheme(saveTheme);
 
         repository.save(saveTheme);
@@ -107,5 +107,6 @@ public class ThemeService {
 
     private void updateData(Theme theme, ThemeUpdate themeUpdate){
         theme.setName(themeUpdate.name());
+        theme.setImageUrl(themeUpdate.imageUrl());
     }
 }

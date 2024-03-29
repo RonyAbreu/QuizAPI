@@ -57,7 +57,7 @@ class ThemeControllerTest extends QuizApplicationTests {
         UserResponse userResponse = UserRequestUtil.post(userRequest);
         String token = UserRequestUtil.login(mockUser.mockUserLogin());
 
-        ThemeRequest themeRequest = new ThemeRequest("");
+        ThemeRequest themeRequest = new ThemeRequest("", "http://imagem.com");
 
         given()
                 .header("Authorization", "Bearer " + token)
@@ -436,7 +436,7 @@ class ThemeControllerTest extends QuizApplicationTests {
 
         ThemeRequest themeRequest = mockTheme.mockRequest(1);
         ThemeResponse postTheme = ThemeRequestUtil.post(themeRequest, token);
-        ThemeUpdate themeUpdate = new ThemeUpdate("");
+        ThemeUpdate themeUpdate = new ThemeUpdate("", "http://imagem.com");
 
         given()
                 .header("Authorization", "Bearer " + token)
@@ -458,12 +458,12 @@ class ThemeControllerTest extends QuizApplicationTests {
         UserResponse userResponse = UserRequestUtil.post(userRequest);
         String token = UserRequestUtil.login(mockUser.mockUserLogin());
 
-        ThemeRequest cineTheme = new ThemeRequest("Cine");
-        ThemeRequest gameTheme = new ThemeRequest("Game");
+        ThemeRequest cineTheme = new ThemeRequest("Cine", "http://imagem.com");
+        ThemeRequest gameTheme = new ThemeRequest("Game", "http://imagem.com");
 
         ThemeResponse postCineTheme = ThemeRequestUtil.post(cineTheme, token);
         ThemeResponse postGameTheme = ThemeRequestUtil.post(gameTheme, token);
-        ThemeUpdate themeUpdate = new ThemeUpdate("Game");
+        ThemeUpdate themeUpdate = new ThemeUpdate("Game", "http://imagem.com");
 
         given()
                 .header("Authorization", "Bearer " + token)

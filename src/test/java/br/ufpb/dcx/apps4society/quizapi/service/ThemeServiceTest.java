@@ -124,11 +124,9 @@ class ThemeServiceTest {
         Mockito.lenient().when(userService.findUserByToken(MockUser.MOCK_TOKEN)).thenReturn(user);
         Mockito.lenient().when(repository.findById(theme.getId())).thenReturn(Optional.of(theme));
 
-        Exception e = assertThrows(DataIntegrityViolationException.class, () ->{
+        assertDoesNotThrow(() ->{
             themeService.removeTheme(theme.getId(), MockUser.MOCK_TOKEN);
         });
-
-        assertEquals(e.getMessage(), Messages.REMOVE_THEME_WITH_QUESTIONS);
     }
 
     @Test

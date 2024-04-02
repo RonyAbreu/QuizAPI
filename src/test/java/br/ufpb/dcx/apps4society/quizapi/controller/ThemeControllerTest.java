@@ -131,6 +131,28 @@ class ThemeControllerTest extends QuizApplicationTests {
     }
 
     @Test
+    void removeThemeWithLinkedQuestions_shouldReturn204Test() {
+        UserRequest userRequest = mockUser.mockRequest(1);
+        UserResponse userResponse = UserRequestUtil.post(userRequest);
+        String token = UserRequestUtil.login(mockUser.mockUserLogin());
+
+        ThemeRequest themeRequest = mockTheme.mockRequest(1);
+        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
+
+        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
+        QuestionRequestUtil.post(questionRequest,token, themeResponse.id());
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .delete(baseURI+":"+port+basePath+BASE_PATH_THEME+"/"+themeResponse.id())
+                .then()
+                .statusCode(204);
+
+        UserRequestUtil.delete(userResponse);
+    }
+
+    @Test
     void removeThemeByIdIsNull_shouldReturn403Test() {
         UserRequest userRequest = mockUser.mockRequest(1);
         UserResponse userResponse = UserRequestUtil.post(userRequest);
@@ -183,30 +205,6 @@ class ThemeControllerTest extends QuizApplicationTests {
                 .then()
                 .statusCode(403);
 
-        ThemeRequestUtil.delete(themeResponse.id(), token);
-        UserRequestUtil.delete(userResponse);
-    }
-
-    @Test
-    void removeThemeWithLinkedQuestions_shouldReturn400Test() {
-        UserRequest userRequest = mockUser.mockRequest(1);
-        UserResponse userResponse = UserRequestUtil.post(userRequest);
-        String token = UserRequestUtil.login(mockUser.mockUserLogin());
-
-        ThemeRequest themeRequest = mockTheme.mockRequest(1);
-        ThemeResponse themeResponse = ThemeRequestUtil.post(themeRequest, token);
-
-        QuestionRequest questionRequest = mockQuestion.mockRequest(1);
-        QuestionResponse questionResponse = QuestionRequestUtil.post(questionRequest,token, themeResponse.id());
-
-        given()
-                .header("Authorization", "Bearer " + token)
-                .when()
-                .delete(baseURI+":"+port+basePath+BASE_PATH_THEME+"/"+themeResponse.id())
-                .then()
-                .statusCode(400);
-
-        QuestionRequestUtil.delete(questionResponse.id(), token);
         ThemeRequestUtil.delete(themeResponse.id(), token);
         UserRequestUtil.delete(userResponse);
     }

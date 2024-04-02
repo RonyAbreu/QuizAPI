@@ -16,7 +16,7 @@ public class Theme implements Serializable {
     private String imageUrl;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private User creator;
-    @OneToMany(mappedBy = "theme", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "theme", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Question> questions = new ArrayList<>();
 
     public Theme(){

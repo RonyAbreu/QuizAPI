@@ -13,7 +13,7 @@ public class MockQuestion implements MockInterface<Question, QuestionRequest>{
     public Question mockEntity(Integer num, Theme theme, User user) {
         return new Question(num.longValue(),
                 "Question",
-                "imagem.com",
+                "http://imagem.com",
                 theme,
                 user
         );
@@ -23,7 +23,7 @@ public class MockQuestion implements MockInterface<Question, QuestionRequest>{
     public Question mockEntity(Integer num) {
         return new Question(num.longValue(),
                 "Question",
-                "imagem.com",
+                "http://imagem.com",
                 new Theme(),
                 new User()
         );
@@ -32,7 +32,7 @@ public class MockQuestion implements MockInterface<Question, QuestionRequest>{
     @Override
     public QuestionRequest mockRequest(Integer num) {
         return new QuestionRequest("Question",
-                "imagem.com");
+                "http://imagem.com");
     }
 
     public List<Question> mockList(Integer size){
@@ -44,6 +44,6 @@ public class MockQuestion implements MockInterface<Question, QuestionRequest>{
     }
 
     public QuestionUpdate mockQuestionUpdate(){
-        return new QuestionUpdate("Novo titulo", "Nova url");
+        return new QuestionUpdate("Novo titulo", "http://nova.com");
     }
 }

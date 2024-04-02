@@ -13,18 +13,20 @@ public class Theme implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String imageUrl;
     @ManyToOne(cascade = CascadeType.PERSIST)
     private User creator;
-    @OneToMany(mappedBy = "theme", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "theme", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Question> questions = new ArrayList<>();
 
     public Theme(){
 
     }
 
-    public Theme(String name, User creator) {
+    public Theme(String name, String imageUrl, User creator) {
         this.name = name;
         this.creator = creator;
+        this.imageUrl = imageUrl;
     }
 
     public Theme(Long id, String name, User creator) {
@@ -34,7 +36,7 @@ public class Theme implements Serializable {
     }
 
     public ThemeResponse entityToResponse(){
-        return new ThemeResponse(id, name);
+        return new ThemeResponse(id, name, imageUrl);
     }
 
     public void addQuestion(Question question){
@@ -50,6 +52,14 @@ public class Theme implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setName(String name) {

@@ -16,7 +16,7 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     @Query(nativeQuery = true, value = """
             SELECT * FROM tb_question
             WHERE theme_id = :idTheme
-            ORDER BY RAND()
+            ORDER BY RANDOM()
             LIMIT 10; 
             """)
     List<Question> find10QuestionsByThemeId(Long idTheme);
@@ -25,7 +25,7 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
             SELECT * FROM tb_question
             WHERE theme_id = :idTheme
             AND creator_id = :idCreator
-            ORDER BY RAND()
+            ORDER BY RANDOM()
             LIMIT 10;
             """)
     List<Question> find10QuestionsByThemeIdAndCreatorId(Long idTheme, UUID idCreator);

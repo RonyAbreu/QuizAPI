@@ -60,13 +60,6 @@ public class ErroExceptionHandler {
         return ResponseEntity.status(status).body(validationErro);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErroResponse> dataIntegrityErro(DataIntegrityViolationException e, HttpServletRequest request){
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
-        return ResponseEntity.status(status).body(erroResponse);
-    }
-
     @ExceptionHandler(InvalidUserException.class)
     public ResponseEntity<ErroResponse> invalidUserErro(InvalidUserException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.NOT_FOUND;

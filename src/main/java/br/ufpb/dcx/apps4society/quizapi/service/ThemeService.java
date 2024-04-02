@@ -36,7 +36,7 @@ public class ThemeService {
 
         User user = userService.findUserByToken(token);
 
-        Theme saveTheme = new Theme(themeRequest.name(), user);
+        Theme saveTheme = new Theme(themeRequest.name(),themeRequest.imageUrl(), user);
         user.addTheme(saveTheme);
 
         repository.save(saveTheme);
@@ -49,9 +49,7 @@ public class ThemeService {
         Theme theme = repository.findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(Messages.THEME_NOT_FOUND));
 
-        if (theme.containsQuestionsInTheList()){
-            throw new DataIntegrityViolationException("Não é permitido remover um Tema que contém questões ligadas a ele");
-        } else if (user.userNotHavePermission(theme.getCreator())) {
+        if (user.userNotHavePermission(theme.getCreator())) {
             throw new UserNotHavePermissionException("Usuário não tem permissão para remover esse tema");
         }
 
@@ -107,5 +105,6 @@ public class ThemeService {
 
     private void updateData(Theme theme, ThemeUpdate themeUpdate){
         theme.setName(themeUpdate.name());
+        theme.setImageUrl(themeUpdate.imageUrl());
     }
 }

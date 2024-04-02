@@ -236,7 +236,7 @@ class QuestionServiceTest {
 
         assertNotNull(result);
         assertEquals("Novo titulo", result.title());
-        assertEquals("Nova url", result.imageUrl());
+        assertEquals("http://nova.com", result.imageUrl());
     }
 
     @Test

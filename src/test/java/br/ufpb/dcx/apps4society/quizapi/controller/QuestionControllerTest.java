@@ -96,7 +96,7 @@ class QuestionControllerTest extends QuizApplicationTests {
 
         ThemeResponse themeResponse = ThemeRequestUtil.post(mockTheme.mockRequest(1), token);
 
-        QuestionRequest questionRequest = new QuestionRequest("", "image.com");
+        QuestionRequest questionRequest = new QuestionRequest("", "http://image.com");
 
         given()
                 .header("Authorization", "Bearer " + token)
@@ -447,7 +447,7 @@ class QuestionControllerTest extends QuizApplicationTests {
         assertNotNull(questionReturned.theme());
 
         assertEquals("Novo titulo", questionReturned.title());
-        assertEquals("Nova url", questionReturned.imageUrl());
+        assertEquals("http://nova.com", questionReturned.imageUrl());
 
         QuestionRequestUtil.delete(questionResponse.id(), token);
         ThemeRequestUtil.delete(themeResponse.id(), token);
@@ -580,7 +580,7 @@ class QuestionControllerTest extends QuizApplicationTests {
 
         ThemeResponse themeResponse = ThemeRequestUtil.post(mockTheme.mockRequest(1), token);
         QuestionResponse questionResponse = QuestionRequestUtil.post(mockQuestion.mockRequest(1), token, themeResponse.id());
-        QuestionUpdate questionUpdate = new QuestionUpdate("", "image.com");
+        QuestionUpdate questionUpdate = new QuestionUpdate("", "http://image.com");
 
         given()
                 .header("Authorization", "Bearer " + token)

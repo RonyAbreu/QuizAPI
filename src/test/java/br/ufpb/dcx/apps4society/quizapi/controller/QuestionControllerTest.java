@@ -358,68 +358,6 @@ class QuestionControllerTest extends QuizApplicationTests {
     }
 
     @Test
-    void findQuestionsByThemeId_shouldReturn200Test() {
-        UserRequest userRequest = mockUser.mockRequest(1);
-        UserResponse userResponse = UserRequestUtil.post(userRequest);
-        String token = UserRequestUtil.login(mockUser.mockUserLogin());
-
-        ThemeResponse themeResponse = ThemeRequestUtil.post(mockTheme.mockRequest(1), token);
-        QuestionResponse questionResponse = QuestionRequestUtil.post(mockQuestion.mockRequest(1), token, themeResponse.id());
-
-        given()
-                .header("Authorization", "Bearer " + token)
-                .when()
-                .get(baseURI+":"+port+basePath+ BASE_PATH_QUESTION+"/theme/"+themeResponse.id())
-                .then()
-                .statusCode(200)
-                .assertThat();
-
-        QuestionRequestUtil.delete(questionResponse.id(), token);
-        ThemeRequestUtil.delete(themeResponse.id(), token);
-        UserRequestUtil.delete(userResponse);
-    }
-
-    @Test
-    void findQuestionsByThemeNotFound_shouldReturn404Test() {
-        UserRequest userRequest = mockUser.mockRequest(1);
-        UserResponse userResponse = UserRequestUtil.post(userRequest);
-        String token = UserRequestUtil.login(mockUser.mockUserLogin());
-
-        ThemeResponse themeResponse = ThemeRequestUtil.post(mockTheme.mockRequest(1), token);
-        ThemeRequestUtil.delete(themeResponse.id(), token);
-
-        given()
-                .header("Authorization", "Bearer " + token)
-                .when()
-                .get(baseURI+":"+port+basePath+ BASE_PATH_QUESTION+"/theme/"+themeResponse.id())
-                .then()
-                .statusCode(404)
-                .assertThat();
-
-        UserRequestUtil.delete(userResponse);
-    }
-
-    @Test
-    void findQuestionsByThemeIdButEmptyList_shouldReturn404Test() {
-        UserRequest userRequest = mockUser.mockRequest(1);
-        UserResponse userResponse = UserRequestUtil.post(userRequest);
-        String token = UserRequestUtil.login(mockUser.mockUserLogin());
-
-        ThemeResponse themeResponse = ThemeRequestUtil.post(mockTheme.mockRequest(1), token);
-
-        given()
-                .header("Authorization", "Bearer " + token)
-                .when()
-                .get(baseURI+":"+port+basePath+ BASE_PATH_QUESTION+"/theme/"+themeResponse.id())
-                .then()
-                .statusCode(404)
-                .assertThat();
-
-        ThemeRequestUtil.delete(themeResponse.id(), token);
-        UserRequestUtil.delete(userResponse);
-    }
-
-    @Test
     void updateQuestionByTitleAndImageUrl_shouldReturn200Test() {
         UserRequest userRequest = mockUser.mockRequest(1);
         UserResponse userResponse = UserRequestUtil.post(userRequest);

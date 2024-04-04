@@ -63,7 +63,7 @@ public class ThemeController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ThemeResponse>> findAllThemes(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                             @RequestParam(value = "size", defaultValue = "30") Integer size){
+                                                             @RequestParam(value = "size", defaultValue = "12") Integer size){
         Pageable pageable = PageRequest.of(page,size);
         return ResponseEntity.ok(service.findAllThemes(pageable));
     }
@@ -71,7 +71,7 @@ public class ThemeController {
     @GetMapping(value = "/search")
     public ResponseEntity<Page<ThemeResponse>> findThemesByName(@RequestParam(value = "name", defaultValue = "") String name,
                                                                 @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                @RequestParam(value = "size", defaultValue = "30") Integer size){
+                                                                @RequestParam(value = "size", defaultValue = "12") Integer size){
         Pageable pageable = PageRequest.of(page,size);
         return ResponseEntity.ok(service.findThemesByName(name, pageable));
     }

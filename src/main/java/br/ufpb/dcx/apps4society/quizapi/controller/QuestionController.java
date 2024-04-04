@@ -70,19 +70,6 @@ public class QuestionController {
         return ResponseEntity.ok(service.findQuestionById(id,token));
     }
 
-    @Operation(tags = "Question", summary = "Find Questions by Theme", responses ={
-            @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = QuestionResponse.class)))),
-            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
-            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
-    } )
-    @GetMapping(value = "/theme/{idTheme}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<QuestionResponse>> findQuestionByThemeId(@PathVariable Long idTheme,
-                                                                        @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                        @RequestParam(value = "size", defaultValue = "20") Integer size){
-        Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findQuestionByThemeId(idTheme,pageable));
-    }
-
     @Operation(tags = "Question", summary = "Update Question", responses ={
             @ApiResponse(description = "Success", responseCode = "200", content = @Content(schema = @Schema(implementation = QuestionResponse.class))),
             @ApiResponse(description = "Bad Request", responseCode = "404", content = @Content()),

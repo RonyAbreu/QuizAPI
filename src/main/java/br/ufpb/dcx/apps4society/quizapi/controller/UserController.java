@@ -57,9 +57,9 @@ public class UserController {
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserResponse> findUserById(@PathVariable UUID id, @RequestHeader("Authorization") String token) throws UserNotHavePermissionException {
-        return ResponseEntity.ok(userService.findUserByUuid(id, token));
+    @GetMapping(value = "/find")
+    public ResponseEntity<UserResponse> findUser(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(userService.findUser(token));
     }
 
     @Operation(tags = "User", summary = "Remove User", responses ={

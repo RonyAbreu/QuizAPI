@@ -56,17 +56,8 @@ public class UserService {
         return new TokenResponse(token);
     }
 
-    public UserResponse findUserByUuid(UUID userUuid, String token) throws UserNotHavePermissionException {
-        User loggedUser = findUserByToken(token);
-
-        User returnUser = userRepository.findById(userUuid)
-                .orElseThrow(() -> new UserNotFoundException(Messages.USER_NOT_FOUND));
-
-        if (loggedUser.userNotHavePermission(returnUser)){
-            throw new UserNotHavePermissionException("Você não tem permissão para buscar esse usuário");
-        }
-
-        return returnUser.entityToResponse();
+    public UserResponse findUser(String token) {
+        return findUserByToken(token).entityToResponse();
     }
 
     public void removeUser(UUID id, String token) throws UserNotHavePermissionException {

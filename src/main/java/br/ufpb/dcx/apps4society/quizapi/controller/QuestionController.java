@@ -113,7 +113,7 @@ public class QuestionController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
             @ApiResponse(description = "Unauthorized", responseCode = "403", content = @Content())
     } )
-    @GetMapping(value = "/quiz/creator/{idTheme}")
+    @GetMapping(value = "/creator/quiz/{idTheme}")
     public ResponseEntity<List<QuestionResponse>> find10QuestionsByThemeIdAndCreatorId(@PathVariable Long idTheme,
                                                                                        @RequestHeader("Authorization") String token){
         return ResponseEntity.ok(service.find10QuestionsByThemeIdAndCreatorId(idTheme, token));

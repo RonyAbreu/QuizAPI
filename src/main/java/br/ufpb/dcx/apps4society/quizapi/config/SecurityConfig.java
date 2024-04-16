@@ -36,6 +36,7 @@ public class SecurityConfig {
                     request.requestMatchers(HttpMethod.GET,"/api/v1/theme/**").permitAll();
                     request.requestMatchers(HttpMethod.GET, "/api/v1/question/quiz/**").permitAll();
                     request.requestMatchers(HttpMethod.POST,"/api/v1/user/**").permitAll();
+                    request.requestMatchers(HttpMethod.GET, "/api/v1/theme/creator").authenticated();
                     request.requestMatchers(HttpMethod.GET, "/api/v1/response").hasRole("ADMIN").anyRequest().authenticated();
                 })
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))

@@ -68,12 +68,31 @@ public class ThemeController {
         return ResponseEntity.ok(service.findAllThemes(pageable));
     }
 
-    @GetMapping(value = "/search")
+    @Operation(tags = "Theme", summary = "Find Themes By Name", responses ={
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ThemeResponse.class)))),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+    })
+    @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ThemeResponse>> findThemesByName(@RequestParam(value = "name", defaultValue = "") String name,
                                                                 @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                                 @RequestParam(value = "size", defaultValue = "12") Integer size){
         Pageable pageable = PageRequest.of(page,size);
         return ResponseEntity.ok(service.findThemesByName(name, pageable));
+    }
+
+    @Operation(tags = "Theme", summary = "Find Themes By Creator", responses ={
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ThemeResponse.class)))),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Forbidden", responseCode = "403", content = @Content()),
+    })
+    @GetMapping(value = "/creator", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<ThemeResponse>> findThemesByCreator(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                   @RequestParam(value = "size", defaultValue = "12") Integer size,
+                                                                   @RequestHeader("Authorization") String token){
+        Pageable pageable = PageRequest.of(page,size);
+        return ResponseEntity.ok(service.findThemesByCreator(token, pageable));
     }
 
     @Operation(tags = "Theme", summary = "Find Theme", responses ={

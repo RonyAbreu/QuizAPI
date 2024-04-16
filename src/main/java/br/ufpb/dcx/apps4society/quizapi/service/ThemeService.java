@@ -11,7 +11,6 @@ import br.ufpb.dcx.apps4society.quizapi.service.exception.ThemeNotFoundException
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotHavePermissionException;
 import br.ufpb.dcx.apps4society.quizapi.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -76,6 +75,18 @@ public class ThemeService {
 
         if (themes.isEmpty()){
             throw new ThemeNotFoundException("Nenhum tema foi cadastrado com esse nome");
+        }
+
+        return themes.map(Theme::entityToResponse);
+    }
+
+    public Page<ThemeResponse> findThemesByCreator(String token, Pageable pageable){
+        User creator = userService.findUserByToken(token);
+
+        Page<Theme> themes = repository.findByCreator(creator, pageable);
+
+        if (themes.isEmpty()){
+            throw new ThemeNotFoundException("Nenhum Tema encontrado");
         }
 
         return themes.map(Theme::entityToResponse);

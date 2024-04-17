@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -90,8 +91,10 @@ public class ThemeController {
     @GetMapping(value = "/creator", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ThemeResponse>> findThemesByCreator(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                                                    @RequestParam(value = "size", defaultValue = "12") Integer size,
+                                                                   @RequestParam(value = "direction", defaultValue = "asc") String direction,
                                                                    @RequestHeader("Authorization") String token){
-        Pageable pageable = PageRequest.of(page,size);
+        Sort.Direction directionOfPage = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page,size, Sort.by(directionOfPage, "name"));
         return ResponseEntity.ok(service.findThemesByCreator(token, pageable));
     }
 

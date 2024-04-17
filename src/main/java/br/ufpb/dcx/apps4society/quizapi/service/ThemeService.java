@@ -104,7 +104,7 @@ public class ThemeService {
 
         Theme themeTestName = repository.findByNameIgnoreCase(themeUpdate.name());
 
-        if (themeTestName != null){
+        if (!theme.equals(themeTestName) && themeTestName != null){
             throw new ThemeAlreadyExistsException("Esse tema já foi cadastrado, tente novamente com outro Nome");
         }
 

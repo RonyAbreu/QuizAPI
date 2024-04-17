@@ -94,7 +94,7 @@ public class ThemeController {
                                                                    @RequestParam(value = "direction", defaultValue = "asc") String direction,
                                                                    @RequestHeader("Authorization") String token){
         Sort.Direction directionOfPage = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page,size, Sort.by(directionOfPage, "name"));
+        Pageable pageable = PageRequest.of(page,size, Sort.by(directionOfPage, "id"));
         return ResponseEntity.ok(service.findThemesByCreator(token, pageable));
     }
 

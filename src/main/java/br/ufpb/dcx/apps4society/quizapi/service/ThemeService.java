@@ -80,10 +80,15 @@ public class ThemeService {
         return themes.map(Theme::entityToResponse);
     }
 
-    public Page<ThemeResponse> findThemesByCreator(String token, Pageable pageable){
+    public Page<ThemeResponse> findThemesByCreator(String token, String name, Pageable pageable){
         User creator = userService.findUserByToken(token);
+        Page<Theme> themes = null;
 
-        Page<Theme> themes = repository.findByCreator(creator, pageable);
+        if (name.isBlank()){
+            themes = repository.findByCreator(creator, pageable);
+        } else {
+            themes = repository.findByCreatorAndNameStartsWithIgnoreCase(creator, name, pageable);
+        }
 
         if (themes.isEmpty()){
             throw new ThemeNotFoundException("Nenhum Tema encontrado");

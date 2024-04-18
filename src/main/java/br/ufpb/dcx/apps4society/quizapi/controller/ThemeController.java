@@ -92,10 +92,11 @@ public class ThemeController {
     public ResponseEntity<Page<ThemeResponse>> findThemesByCreator(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                                                    @RequestParam(value = "size", defaultValue = "12") Integer size,
                                                                    @RequestParam(value = "direction", defaultValue = "asc") String direction,
+                                                                   @RequestParam(value = "name", defaultValue = "") String name,
                                                                    @RequestHeader("Authorization") String token){
         Sort.Direction directionOfPage = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page,size, Sort.by(directionOfPage, "id"));
-        return ResponseEntity.ok(service.findThemesByCreator(token, pageable));
+        return ResponseEntity.ok(service.findThemesByCreator(token, name, pageable));
     }
 
     @Operation(tags = "Theme", summary = "Find Theme", responses ={

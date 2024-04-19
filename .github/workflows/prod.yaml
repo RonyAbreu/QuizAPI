@@ -5,7 +5,6 @@ on:
     branches: [main]
 
 jobs:
-
   build-and-push:
     name: Build And Push
     runs-on: ubuntu-latest
@@ -43,5 +42,3 @@ jobs:
             docker rm -f container-quiz-api
             docker pull a4sufpb/quizapi
             docker compose up -d
-            
-          

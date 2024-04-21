@@ -31,4 +31,5 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
     List<Question> find10QuestionsByThemeIdAndCreatorId(Long idTheme, UUID idCreator);
 
     Page<Question> findByCreatorAndThemeId(User user, Long id, Pageable pageable);
+    Page<Question> findByCreatorAndThemeIdAndTitleStartsWithIgnoreCase(User creator, Long themeId, String title, Pageable pageable);
 }

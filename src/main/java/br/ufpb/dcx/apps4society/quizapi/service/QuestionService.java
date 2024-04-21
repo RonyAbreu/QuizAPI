@@ -93,13 +93,19 @@ public class QuestionService {
         return questionPage.map(Question::entityToResponse);
     }
 
-    public Page<QuestionResponse> findQuestionsByCreatorAndTheme(String token, Long themeId, Pageable pageable){
+    public Page<QuestionResponse> findQuestionsByCreatorAndTheme(String token, String title, Long themeId, Pageable pageable){
         User creator = userService.findUserByToken(token);
 
         Theme theme = themeRepository.findById(themeId)
                 .orElseThrow(() -> new ThemeNotFoundException("Tema não encontrado"));
 
-        Page<Question> questions = questionRepository.findByCreatorAndThemeId(creator, themeId, pageable);
+        Page<Question> questions;
+
+        if (title.isBlank()){
+            questions = questionRepository.findByCreatorAndThemeId(creator, themeId, pageable);
+        } else {
+            questions = questionRepository.findByCreatorAndThemeIdAndTitleStartsWithIgnoreCase(creator, themeId, title, pageable);
+        }
 
         if (questions.isEmpty()){
             throw new QuestionNotFoundException("Não existe Questões criadas por esse Usuário");

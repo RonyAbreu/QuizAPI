@@ -102,10 +102,11 @@ public class QuestionController {
     @GetMapping(value = "/creator/theme/{idTheme}")
     public ResponseEntity<Page<QuestionResponse>> findQuestionsByCreator(@RequestHeader("Authorization") String token,
                                                                          @PathVariable Long idTheme,
+                                                                         @RequestParam(value = "title", defaultValue = "") String title,
                                                                          @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                                          @RequestParam(value = "size", defaultValue = "20") Integer size){
         Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findQuestionsByCreatorAndTheme(token, idTheme,pageable));
+        return ResponseEntity.ok(service.findQuestionsByCreatorAndTheme(token, title, idTheme, pageable));
     }
 
     @Operation(tags = "Question", summary = "Find 10 Questions by Theme and Creator", responses ={

@@ -372,7 +372,7 @@ class QuestionControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(questionUpdate)
                 .when()
-                .put(baseURI+":"+port+basePath+ BASE_PATH_QUESTION+"/"+questionResponse.id())
+                .patch(baseURI+":"+port+basePath+ BASE_PATH_QUESTION+"/"+questionResponse.id())
                 .then()
                 .statusCode(200)
                 .extract()
@@ -407,7 +407,7 @@ class QuestionControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(questionUpdate)
                 .when()
-                .put(baseURI+":"+port+basePath+ BASE_PATH_QUESTION+"/"+questionResponse.id())
+                .patch(baseURI+":"+port+basePath+ BASE_PATH_QUESTION+"/"+questionResponse.id())
                 .then()
                 .statusCode(200)
                 .extract()
@@ -447,7 +447,7 @@ class QuestionControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(questionUpdate)
                 .when()
-                .put(baseURI + ":" + port + basePath + BASE_PATH_QUESTION + "/" + questionResponse.id())
+                .patch(baseURI + ":" + port + basePath + BASE_PATH_QUESTION + "/" + questionResponse.id())
                 .then()
                 .assertThat()
                 .statusCode(403);
@@ -476,7 +476,7 @@ class QuestionControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(questionUpdate)
                 .when()
-                .put(baseURI + ":" + port + basePath + BASE_PATH_QUESTION + "/" + questionResponse.id())
+                .patch(baseURI + ":" + port + basePath + BASE_PATH_QUESTION + "/" + questionResponse.id())
                 .then()
                 .assertThat()
                 .statusCode(404);
@@ -500,7 +500,7 @@ class QuestionControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(questionUpdate)
                 .when()
-                .put(baseURI + ":" + port + basePath + BASE_PATH_QUESTION + "/" + questionResponse.id())
+                .patch(baseURI + ":" + port + basePath + BASE_PATH_QUESTION + "/" + questionResponse.id())
                 .then()
                 .assertThat()
                 .statusCode(403);
@@ -525,7 +525,7 @@ class QuestionControllerTest extends QuizApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(questionUpdate)
                 .when()
-                .put(baseURI + ":" + port + basePath + BASE_PATH_QUESTION + "/" + questionResponse.id())
+                .patch(baseURI + ":" + port + basePath + BASE_PATH_QUESTION + "/" + questionResponse.id())
                 .then()
                 .assertThat()
                 .statusCode(400);

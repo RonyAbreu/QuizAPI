@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -80,9 +81,11 @@ public class ResponseController {
     @GetMapping(value = "/question/creator")
     public ResponseEntity<Page<ResponseDTO>> findResponsesByQuestionCreator(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                                                             @RequestParam(value = "size", defaultValue = "20") Integer size,
+                                                                            @RequestParam(value = "date", defaultValue = "") LocalDate date,
+                                                                            @RequestParam(value = "questionId", defaultValue = "") Long questionId,
                                                                             @RequestHeader("Authorization") String token){
         Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findResponsesByQuestionCreator(pageable,token));
+        return ResponseEntity.ok(service.findResponsesByQuestionCreator(pageable,token, date, questionId));
     }
 
     @Operation(tags = "Response", summary = "Remove Response", responses ={

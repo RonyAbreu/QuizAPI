@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -91,10 +92,20 @@ public class ResponseService {
         return responses.map(Response::entityToResponse);
     }
 
-    public Page<ResponseDTO> findResponsesByQuestionCreator(Pageable pageable, String token){
+    public Page<ResponseDTO> findResponsesByQuestionCreator(Pageable pageable, String token, LocalDate date, Long questionId){
         User loggedUser = findUserByToken(token);
 
-        Page<Response> responses = responseRepository.findByQuestionCreator(pageable, loggedUser);
+        Page<Response> responses;
+
+        if (date != null && questionId == null){
+            responses = responseRepository.findByDateTime(pageable, loggedUser.getUuid(), date);
+        } else if (date == null && questionId != null){
+            responses = responseRepository.findByQuestionId(pageable, loggedUser.getUuid(), questionId);
+        } else if (date != null && questionId != null) {
+            responses = responseRepository.findByDateTimeAndQuestionId(pageable, loggedUser.getUuid(), date, questionId);
+        } else {
+            responses = responseRepository.findByQuestionCreator(pageable, loggedUser);
+        }
 
         if (responses.isEmpty()){
             throw new ResponseNotFoundException("Essa questão ainda não possui resposta cadastrada");

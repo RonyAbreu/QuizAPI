@@ -55,8 +55,15 @@ public class ThemeService {
         repository.delete(theme);
     }
 
-    public Page<ThemeResponse> findAllThemes(Pageable pageable){
-        Page<Theme> themes = repository.findAll(pageable);
+    public Page<ThemeResponse> findAllThemes(Pageable pageable, String name){
+        Page<Theme> themes;
+
+        if (name.isBlank()){
+            themes = repository.findAll(pageable);
+        } else {
+            themes = repository.findByNameStartsWithIgnoreCase(name, pageable);
+        }
+
         if (themes.isEmpty()){
             throw new ThemeNotFoundException("Nenhum tema foi cadastrado");
         }
@@ -68,16 +75,6 @@ public class ThemeService {
         return repository.findById(id)
                 .orElseThrow(() -> new ThemeNotFoundException(Messages.THEME_NOT_FOUND))
                 .entityToResponse();
-    }
-
-    public Page<ThemeResponse> findThemesByName(String name, Pageable pageable){
-        Page<Theme> themes = repository.findByNameStartsWithIgnoreCase(name, pageable);
-
-        if (themes.isEmpty()){
-            throw new ThemeNotFoundException("Nenhum tema foi cadastrado com esse nome");
-        }
-
-        return themes.map(Theme::entityToResponse);
     }
 
     public Page<ThemeResponse> findThemesByCreator(String token, String name, Pageable pageable){

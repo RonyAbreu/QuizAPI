@@ -64,22 +64,10 @@ public class ThemeController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ThemeResponse>> findAllThemes(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                             @RequestParam(value = "size", defaultValue = "12") Integer size){
+                                                             @RequestParam(value = "size", defaultValue = "12") Integer size,
+                                                             @RequestParam(value = "name", defaultValue = "") String name){
         Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findAllThemes(pageable));
-    }
-
-    @Operation(tags = "Theme", summary = "Find Themes By Name", responses ={
-            @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ThemeResponse.class)))),
-            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
-            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
-    })
-    @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<ThemeResponse>> findThemesByName(@RequestParam(value = "name", defaultValue = "") String name,
-                                                                @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                @RequestParam(value = "size", defaultValue = "12") Integer size){
-        Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findThemesByName(name, pageable));
+        return ResponseEntity.ok(service.findAllThemes(pageable, name));
     }
 
     @Operation(tags = "Theme", summary = "Find Themes By Creator", responses ={

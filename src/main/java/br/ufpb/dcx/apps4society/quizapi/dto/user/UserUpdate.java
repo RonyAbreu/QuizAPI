@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 public record UserUpdate(
         @NotBlank(message = "Campo name não pode ser vazio")
-        @Size(min = 3, max = 100, message = "Número de caracteres inválido")
+        @Size(min = 3, max = 30, message = "Número de caracteres inválido")
         String name
 ) {
 }

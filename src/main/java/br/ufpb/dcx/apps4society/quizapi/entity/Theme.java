@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity(name = "tb_theme")
 public class Theme implements Serializable {
@@ -42,8 +43,18 @@ public class Theme implements Serializable {
     public void addQuestion(Question question){
         this.questions.add(question);
     }
-    public boolean containsQuestionsInTheList(){
-        return !questions.isEmpty();
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Theme theme = (Theme) object;
+        return Objects.equals(id, theme.id) && Objects.equals(name, theme.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 
     public Long getId() {

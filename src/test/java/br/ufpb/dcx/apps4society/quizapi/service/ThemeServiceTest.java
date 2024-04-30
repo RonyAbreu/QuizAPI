@@ -153,7 +153,7 @@ class ThemeServiceTest {
         Page<Theme> themePage = new PageImpl<>(themeList);
         Mockito.lenient().when(repository.findAll(pageable)).thenReturn(themePage);
 
-        Assertions.assertDoesNotThrow(() -> themeService.findAllThemes(pageable));
+        Assertions.assertDoesNotThrow(() -> themeService.findAllThemes(pageable, ""));
         assertEquals(1, themePage.getNumberOfElements());
 
         verify(repository, times(1)).findAll(pageable);
@@ -168,7 +168,7 @@ class ThemeServiceTest {
         Mockito.lenient().when(repository.findAll(pageable)).thenReturn(themePage);
 
         Exception e = assertThrows(ThemeNotFoundException.class, () ->{
-            themeService.findAllThemes(pageable);
+            themeService.findAllThemes(pageable, "");
         });
 
         assertEquals(0, themePage.getNumberOfElements());

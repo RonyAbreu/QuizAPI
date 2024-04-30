@@ -341,7 +341,7 @@ class ThemeControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get(baseURI+":"+port+basePath+BASE_PATH_THEME+"/search?name="+themeRequest.name())
+                .get(baseURI+":"+port+basePath+BASE_PATH_THEME+"?name="+themeRequest.name())
                 .then()
                 .statusCode(200)
                 .assertThat();
@@ -364,7 +364,7 @@ class ThemeControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get(baseURI+":"+port+basePath+BASE_PATH_THEME+"/search?name=")
+                .get(baseURI+":"+port+basePath+BASE_PATH_THEME+"?name=")
                 .then()
                 .statusCode(200)
                 .assertThat();
@@ -388,7 +388,7 @@ class ThemeControllerTest extends QuizApplicationTests {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get(baseURI+":"+port+basePath+BASE_PATH_THEME+"/search?name="+themeRequest.name())
+                .get(baseURI+":"+port+basePath+BASE_PATH_THEME+"?name="+themeRequest.name())
                 .then()
                 .statusCode(404)
                 .assertThat();

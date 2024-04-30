@@ -5,7 +5,6 @@ on:
     branches: [main]
 
 jobs:
-
   build-and-push:
     name: Build And Push
     runs-on: ubuntu-latest
@@ -30,3 +29,16 @@ jobs:
 
       - name: Push Image to Docker Hub
         run: docker push ${{secrets.DOCKER_USERNAME}}/quizapi
+
+      - name: Connecting and Deploying to the SSH Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_SECRET_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd Quiz-A4S
+            docker rm -f container-quiz-api
+            docker pull a4sufpb/quizapi
+            docker compose up -d

@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.URL;
 
 public record QuestionRequest(
         @NotBlank(message = "Campo de titulo não pode ser vazio")
-        @Size(min = 4 ,max = 500, message = "Número de caracteres inválido")
+        @Size(min = 4 ,max = 170, message = "Número de caracteres inválido")
         String title,
         @Size(max = 255, message = "Número de caracteres inválido")
         @URL(message = "URL inválida")

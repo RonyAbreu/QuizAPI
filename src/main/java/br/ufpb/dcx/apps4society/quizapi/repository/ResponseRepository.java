@@ -5,8 +5,36 @@ import br.ufpb.dcx.apps4society.quizapi.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 public interface ResponseRepository extends JpaRepository<Response,Long> {
     Page<Response> findByUser(Pageable pageable, User user);
     Page<Response> findByQuestionCreator(Pageable pageable, User creator);
+    @Query(nativeQuery = true, value = """
+            SELECT r.* FROM tb_response r
+            JOIN tb_question q on r.question_id = q.id
+            WHERE DATE(date_time) = :date
+            AND q.creator_uuid = :uuid
+            """)
+    Page<Response> findByDateTime(Pageable pageable, UUID uuid, LocalDate date);
+
+    @Query(nativeQuery = true, value = """
+            SELECT r.* FROM tb_response r
+            JOIN tb_question q on r.question_id = q.id
+            WHERE r.question_id = :questionId
+            AND q.creator_uuid = :uuid
+            """)
+    Page<Response> findByQuestionId(Pageable pageable, UUID uuid, Long questionId);
+
+    @Query(nativeQuery = true, value = """
+            SELECT r.* FROM tb_response r
+            JOIN tb_question q on r.question_id = q.id
+            WHERE DATE(date_time) = :date
+            AND q.creator_uuid = :uuid
+            AND r.question_id = :questionId
+            """)
+    Page<Response> findByDateTimeAndQuestionId(Pageable pageable, UUID uuid, LocalDate date, Long questionId);
 }

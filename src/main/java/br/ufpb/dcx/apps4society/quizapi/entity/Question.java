@@ -47,7 +47,7 @@ public class Question implements Serializable {
     }
 
     public QuestionResponse entityToResponse(){
-        return new QuestionResponse(id,title,imageUrl,theme.entityToResponse(),
+        return new QuestionResponse(id,title,imageUrl, creator.getUuid(),theme.entityToResponse(),
                 alternatives.stream().map(Alternative::entityToResponse).toList());
     }
 

@@ -11,7 +11,6 @@ import br.ufpb.dcx.apps4society.quizapi.service.exception.ThemeNotFoundException
 import br.ufpb.dcx.apps4society.quizapi.service.exception.UserNotHavePermissionException;
 import br.ufpb.dcx.apps4society.quizapi.util.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -56,8 +55,15 @@ public class ThemeService {
         repository.delete(theme);
     }
 
-    public Page<ThemeResponse> findAllThemes(Pageable pageable){
-        Page<Theme> themes = repository.findAll(pageable);
+    public Page<ThemeResponse> findAllThemes(Pageable pageable, String name){
+        Page<Theme> themes;
+
+        if (name.isBlank()){
+            themes = repository.findAll(pageable);
+        } else {
+            themes = repository.findByNameStartsWithIgnoreCase(name, pageable);
+        }
+
         if (themes.isEmpty()){
             throw new ThemeNotFoundException("Nenhum tema foi cadastrado");
         }
@@ -71,11 +77,18 @@ public class ThemeService {
                 .entityToResponse();
     }
 
-    public Page<ThemeResponse> findThemesByName(String name, Pageable pageable){
-        Page<Theme> themes = repository.findByNameStartsWithIgnoreCase(name, pageable);
+    public Page<ThemeResponse> findThemesByCreator(String token, String name, Pageable pageable){
+        User creator = userService.findUserByToken(token);
+        Page<Theme> themes = null;
+
+        if (name.isBlank()){
+            themes = repository.findByCreator(creator, pageable);
+        } else {
+            themes = repository.findByCreatorAndNameStartsWithIgnoreCase(creator, name, pageable);
+        }
 
         if (themes.isEmpty()){
-            throw new ThemeNotFoundException("Nenhum tema foi cadastrado com esse nome");
+            throw new ThemeNotFoundException("Nenhum Tema encontrado");
         }
 
         return themes.map(Theme::entityToResponse);
@@ -93,7 +106,7 @@ public class ThemeService {
 
         Theme themeTestName = repository.findByNameIgnoreCase(themeUpdate.name());
 
-        if (themeTestName != null){
+        if (!theme.equals(themeTestName) && themeTestName != null){
             throw new ThemeAlreadyExistsException("Esse tema já foi cadastrado, tente novamente com outro Nome");
         }
 

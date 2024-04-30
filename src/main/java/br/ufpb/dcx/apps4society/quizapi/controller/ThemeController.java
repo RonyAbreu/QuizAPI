@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,17 +64,27 @@ public class ThemeController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ThemeResponse>> findAllThemes(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                             @RequestParam(value = "size", defaultValue = "30") Integer size){
+                                                             @RequestParam(value = "size", defaultValue = "12") Integer size,
+                                                             @RequestParam(value = "name", defaultValue = "") String name){
         Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findAllThemes(pageable));
+        return ResponseEntity.ok(service.findAllThemes(pageable, name));
     }
 
-    @GetMapping(value = "/search")
-    public ResponseEntity<Page<ThemeResponse>> findThemesByName(@RequestParam(value = "name", defaultValue = "") String name,
-                                                                @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                @RequestParam(value = "size", defaultValue = "30") Integer size){
-        Pageable pageable = PageRequest.of(page,size);
-        return ResponseEntity.ok(service.findThemesByName(name, pageable));
+    @Operation(tags = "Theme", summary = "Find Themes By Creator", responses ={
+            @ApiResponse(description = "Success", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ThemeResponse.class)))),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content()),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content()),
+            @ApiResponse(description = "Forbidden", responseCode = "403", content = @Content()),
+    })
+    @GetMapping(value = "/creator", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<ThemeResponse>> findThemesByCreator(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                   @RequestParam(value = "size", defaultValue = "12") Integer size,
+                                                                   @RequestParam(value = "direction", defaultValue = "asc") String direction,
+                                                                   @RequestParam(value = "name", defaultValue = "") String name,
+                                                                   @RequestHeader("Authorization") String token){
+        Sort.Direction directionOfPage = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page,size, Sort.by(directionOfPage, "id"));
+        return ResponseEntity.ok(service.findThemesByCreator(token, name, pageable));
     }
 
     @Operation(tags = "Theme", summary = "Find Theme", responses ={

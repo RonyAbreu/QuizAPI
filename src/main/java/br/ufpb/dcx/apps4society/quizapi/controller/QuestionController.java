@@ -44,7 +44,7 @@ public class QuestionController {
     } )
     @PostMapping(value = "/{idTheme}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<QuestionResponse> insertQuestion(@RequestBody @Valid QuestionRequest questionRequest, @PathVariable Long idTheme,
-                                                           @RequestHeader(value = "Authorization") String token) {
+                                                           @RequestHeader(value = "Authorization") String token) throws UserNotHavePermissionException {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insertQuestion(questionRequest, idTheme, token));
     }
 

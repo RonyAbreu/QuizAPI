@@ -31,11 +31,14 @@ public class Score implements Serializable {
     }
 
     private Double calculateResult(Integer numberOfHits, Integer totalTime){
-        double hitValue = 80.4;
-        double reduceValue = 1.5;
+        double hitValue = 87.45;
+        double reduceValue = 1.46;
         double result = (numberOfHits * hitValue) - (totalTime * reduceValue);
-        String df = new DecimalFormat("#.##").format(result).replace(",",".");
-        return Double.valueOf(df);
+
+        String formattedResult = new DecimalFormat("#.###").format(result).replace(",",".");
+
+        if (result < 0) return  0.0;
+        return Double.valueOf(formattedResult);
     }
 
     public ScoreResponse entityToResponse() {

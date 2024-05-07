@@ -33,11 +33,15 @@ public class QuestionService {
         this.userService = userService;
     }
 
-    public QuestionResponse insertQuestion(QuestionRequest questionRequest, Long idTheme, String token){
+    public QuestionResponse insertQuestion(QuestionRequest questionRequest, Long idTheme, String token) throws UserNotHavePermissionException {
         User creator = userService.findUserByToken(token);
 
         Theme theme = themeRepository.findById(idTheme)
                 .orElseThrow(()-> new ThemeNotFoundException("Tema não encontrado"));
+
+        if (!theme.getCreator().equals(creator)){
+            throw new UserNotHavePermissionException("Você não tem permissão para cadastrar questões nesse Tema");
+        }
 
         Question question = new Question(questionRequest, theme, creator);
         theme.addQuestion(question);

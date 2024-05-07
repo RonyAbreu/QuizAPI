@@ -19,6 +19,8 @@ public class Theme implements Serializable {
     private User creator;
     @OneToMany(mappedBy = "theme", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "theme", cascade = CascadeType.REMOVE)
+    private List<Score> ranking = new ArrayList<>();
 
     public Theme(){
 

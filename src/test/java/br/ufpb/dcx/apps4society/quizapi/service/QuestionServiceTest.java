@@ -55,10 +55,10 @@ class QuestionServiceTest {
     }
 
     @Test
-    void insertQuestion() {
+    void insertQuestion() throws UserNotHavePermissionException {
         QuestionRequest questionRequest = mockQuestion.mockRequest(1);
         User creator = mockUser.mockEntity(1);
-        Theme theme = mockTheme.mockEntity(1);
+        Theme theme = mockTheme.mockEntity(1, creator);
         Question question = mockQuestion.mockEntity(1);
 
         Mockito.lenient().when(userService.findUserByToken(MockUser.MOCK_TOKEN)).thenReturn(creator);

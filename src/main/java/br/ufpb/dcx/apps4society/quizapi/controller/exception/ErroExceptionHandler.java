@@ -50,6 +50,13 @@ public class ErroExceptionHandler {
         return ResponseEntity.status(status).body(erroResponse);
     }
 
+    @ExceptionHandler(ScoreNotFoundException.class)
+    public ResponseEntity<ErroResponse> scoreNotFoundErro(ScoreNotFoundException e, HttpServletRequest request){
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErroResponse erroResponse = new ErroResponse(Instant.now(),status.value(),e.getMessage(),request.getRequestURI());
+        return ResponseEntity.status(status).body(erroResponse);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErroResponse> validationErro(MethodArgumentNotValidException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.BAD_REQUEST;
